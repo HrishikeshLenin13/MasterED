@@ -468,13 +468,48 @@
               </div>
             </div>
 
+            <div class="question-bank-subject-row">
+              <button class="subject-toggle active" data-subject="rw" type="button">Reading & Writing</button>
+              <button class="subject-toggle active" data-subject="math" type="button">Math</button>
+            </div>
+
             <div class="question-bank-filter-row">
-              <button class="filter-pill active" type="button">Active Questions</button>
-              <button class="filter-pill" type="button">Difficulty</button>
+              <button class="filter-pill difficulty-trigger" id="difficulty-trigger" type="button">Difficulty</button>
               <button class="filter-pill" type="button">Timed</button>
               <button class="filter-pill" type="button">Marked</button>
               <button class="filter-pill" type="button">Solved</button>
               <button class="filter-pill" type="button">Incorrect</button>
+            </div>
+
+            <div class="difficulty-panel hidden" id="difficulty-panel">
+              <div class="difficulty-panel-head">
+                <strong>Difficulty</strong>
+                <span id="difficulty-range-label">1 - 7</span>
+              </div>
+              <div class="difficulty-slider-grid">
+                <label class="difficulty-bound">
+                  <span>Minimum</span>
+                  <input id="difficulty-min" type="range" min="1" max="7" value="1" />
+                </label>
+                <label class="difficulty-bound">
+                  <span>Maximum</span>
+                  <input id="difficulty-max" type="range" min="1" max="7" value="7" />
+                </label>
+              </div>
+              <div class="difficulty-scale">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>6</span>
+                <span>7</span>
+              </div>
+              <div class="difficulty-bands">
+                <span>Easy</span>
+                <span>Medium</span>
+                <span>Hard</span>
+              </div>
             </div>
 
             <div class="question-bank-panels">
@@ -498,6 +533,7 @@
                     <strong id="qbank-complete-count">0</strong>
                   </div>
                 </div>
+                <div class="selection-pills" id="selection-pills"></div>
                 <button class="hero-primary question-bank-cta" id="qbank-start-button" type="button">Start a focused set</button>
               </aside>
 
@@ -513,7 +549,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Craft and Structure</h3>
+                    <button class="cluster-toggle" data-topic="Craft and Structure" type="button">Craft and Structure</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -529,7 +565,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Expression of Ideas</h3>
+                    <button class="cluster-toggle" data-topic="Expression of Ideas" type="button">Expression of Ideas</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -544,7 +580,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Information and Ideas</h3>
+                    <button class="cluster-toggle" data-topic="Information and Ideas" type="button">Information and Ideas</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -560,7 +596,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Standard English Conventions</h3>
+                    <button class="cluster-toggle" data-topic="Standard English Conventions" type="button">Standard English Conventions</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -585,7 +621,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Algebra</h3>
+                    <button class="cluster-toggle" data-topic="Algebra" type="button">Algebra</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -602,7 +638,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Advanced Math</h3>
+                    <button class="cluster-toggle" data-topic="Advanced Math" type="button">Advanced Math</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -618,7 +654,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Problem-Solving and Data Analysis</h3>
+                    <button class="cluster-toggle" data-topic="Problem-Solving and Data Analysis" type="button">Problem-Solving and Data Analysis</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>
@@ -635,7 +671,7 @@
 
                 <div class="topic-cluster">
                   <div class="topic-cluster-head">
-                    <h3>Geometry and Trigonometry</h3>
+                    <button class="cluster-toggle" data-topic="Geometry and Trigonometry" type="button">Geometry and Trigonometry</button>
                     <div class="topic-cluster-stats">
                       <span class="count-chip review">0</span>
                       <span class="count-chip done">0</span>

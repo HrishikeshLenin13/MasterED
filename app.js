@@ -101,14 +101,24 @@ const qbankUtilityButtons = Array.from(document.querySelectorAll(".qbank-utility
 const qbankFilterButtons = Array.from(document.querySelectorAll(".filter-pill"));
 const qbankTopicRows = Array.from(document.querySelectorAll(".topic-row"));
 const qbankTopicPanelButtons = Array.from(document.querySelectorAll(".topic-panel-button"));
+const qbankClusterButtons = Array.from(document.querySelectorAll(".cluster-toggle"));
+const qbankSubjectButtons = Array.from(document.querySelectorAll(".subject-toggle"));
 const qbankCurrentTitle = document.getElementById("qbank-current-title");
 const qbankCurrentCopy = document.getElementById("qbank-current-copy");
 const qbankStartButton = document.getElementById("qbank-start-button");
+const qbankSelectionPills = document.getElementById("selection-pills");
+const difficultyTrigger = document.getElementById("difficulty-trigger");
+const difficultyPanel = document.getElementById("difficulty-panel");
+const difficultyMin = document.getElementById("difficulty-min");
+const difficultyMax = document.getElementById("difficulty-max");
+const difficultyRangeLabel = document.getElementById("difficulty-range-label");
 
 let authMode = "signin";
 let splashFinished = false;
 let resolvedUser = null;
 let currentQuestionBankTopic = "";
+const selectedSubjects = new Set(["rw", "math"]);
+const selectedTopics = new Set();
 
 function getUserName(user) {
   return user?.displayName || user?.email?.split("@")[0] || "MasterED User";
@@ -262,10 +272,50 @@ function setSingleActiveButton(buttons, activeButton) {
   });
 }
 
-function updateQuestionBankSelection(topic, description) {
-  currentQuestionBankTopic = topic;
-  qbankCurrentTitle.textContent = topic;
-  qbankCurrentCopy.textContent = description;
+function syncDifficultyRange() {
+  let minValue = Number(difficultyMin.value);
+  let maxValue = Number(difficultyMax.value);
+
+  if (minValue > maxValue) {
+    if (document.activeElement === difficultyMin) {
+      maxValue = minValue;
+      difficultyMax.value = String(maxValue);
+    } else {
+      minValue = maxValue;
+      difficultyMin.value = String(minValue);
+    }
+  }
+
+  difficultyRangeLabel.textContent = `${minValue} - ${maxValue}`;
+}
+
+function renderQuestionBankSelection() {
+  const subjectLabels = Array.from(selectedSubjects).map((subject) =>
+    subject === "rw" ? "Reading & Writing" : "Math"
+  );
+  const topicLabels = Array.from(selectedTopics);
+  const difficultyText = difficultyRangeLabel.textContent;
+
+  qbankSelectionPills.innerHTML = [
+    ...subjectLabels.map((label) => `<span class="subject-pill">${label}</span>`),
+    ...topicLabels.map((label) => `<span>${label}</span>`),
+    `<span>Difficulty ${difficultyText}</span>`
+  ].join("");
+
+  if (!subjectLabels.length && !topicLabels.length) {
+    currentQuestionBankTopic = "";
+    qbankCurrentTitle.textContent = "Nothing selected yet";
+    qbankCurrentCopy.textContent =
+      "Pick a topic to build a clean practice block. Timed mode, mistakes, and review all stay in the same flow.";
+    return;
+  }
+
+  currentQuestionBankTopic = topicLabels[topicLabels.length - 1] || subjectLabels.join(" + ");
+  qbankCurrentTitle.textContent = currentQuestionBankTopic;
+  qbankCurrentCopy.textContent =
+    `Subjects: ${subjectLabels.length ? subjectLabels.join(", ") : "none"} · Topics: ${
+      topicLabels.length ? topicLabels.join(", ") : "none"
+    } · Difficulty ${difficultyText}.`;
 }
 
 function showCalculator(activeButton) {
@@ -415,43 +465,97 @@ qbankUtilityButtons.forEach((button) => {
 
 qbankFilterButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    if (button === difficultyTrigger) {
+      difficultyPanel.classList.toggle("hidden");
+      button.classList.toggle("active", !difficultyPanel.classList.contains("hidden"));
+      return;
+    }
+
     button.classList.toggle("active");
   });
 });
 
 qbankTopicRows.forEach((button) => {
   button.addEventListener("click", () => {
-    setSingleActiveButton(qbankTopicRows, button);
-    updateQuestionBankSelection(
-      button.dataset.topic || button.querySelector("span")?.textContent || "Focused topic",
-      "This topic is selected. Question inventory is still empty right now, but the workflow, filters, and pacing surface are ready for real content."
-    );
+    const topic = button.dataset.topic || button.querySelector("span")?.textContent || "Focused topic";
+    if (selectedTopics.has(topic)) {
+      selectedTopics.delete(topic);
+      button.classList.remove("active");
+    } else {
+      selectedTopics.add(topic);
+      button.classList.add("active");
+    }
+    renderQuestionBankSelection();
   });
 });
 
 qbankTopicPanelButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const panelTitle = button.closest(".topic-panel")?.querySelector("h2")?.textContent || "All topics";
-    updateQuestionBankSelection(
-      `${panelTitle} overview`,
-      `Browsing the full ${panelTitle.toLowerCase()} map. As questions are added, this panel can open every topic in one focused drill flow.`
-    );
+    const subjectKey = panelTitle.toLowerCase().includes("math") ? "math" : "rw";
+    if (selectedSubjects.has(subjectKey) && selectedSubjects.size === 1) {
+      selectedSubjects.add(subjectKey);
+    } else if (selectedSubjects.has(subjectKey)) {
+      selectedSubjects.delete(subjectKey);
+    } else {
+      selectedSubjects.add(subjectKey);
+    }
+    qbankSubjectButtons.forEach((subjectButton) => {
+      subjectButton.classList.toggle("active", selectedSubjects.has(subjectButton.dataset.subject));
+    });
+    renderQuestionBankSelection();
   });
+});
+
+qbankClusterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const topic = button.dataset.topic;
+    if (selectedTopics.has(topic)) {
+      selectedTopics.delete(topic);
+      button.classList.remove("active");
+    } else {
+      selectedTopics.add(topic);
+      button.classList.add("active");
+    }
+    renderQuestionBankSelection();
+  });
+});
+
+qbankSubjectButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const subject = button.dataset.subject;
+    if (selectedSubjects.has(subject) && selectedSubjects.size > 1) {
+      selectedSubjects.delete(subject);
+      button.classList.remove("active");
+    } else if (!selectedSubjects.has(subject)) {
+      selectedSubjects.add(subject);
+      button.classList.add("active");
+    }
+    renderQuestionBankSelection();
+  });
+});
+
+difficultyMin.addEventListener("input", () => {
+  syncDifficultyRange();
+  renderQuestionBankSelection();
+});
+
+difficultyMax.addEventListener("input", () => {
+  syncDifficultyRange();
+  renderQuestionBankSelection();
 });
 
 qbankStartButton.addEventListener("click", () => {
   if (!currentQuestionBankTopic) {
-    updateQuestionBankSelection(
-      "Choose a topic first",
-      "Select any topic row or subject overview to build a focused set. Right now the question counts are intentionally at zero until the bank is loaded."
-    );
+    qbankCurrentTitle.textContent = "Choose a topic first";
+    qbankCurrentCopy.textContent =
+      "Select any topic row, skill family, or subject area to build a focused set. Right now the question counts are intentionally at zero until the bank is loaded.";
     return;
   }
 
-  updateQuestionBankSelection(
-    `${currentQuestionBankTopic} ready`,
-    "The question-bank shell is prepared for this set. Once content is loaded, this button can launch directly into the matching practice session."
-  );
+  qbankCurrentTitle.textContent = `${currentQuestionBankTopic} ready`;
+  qbankCurrentCopy.textContent =
+    "The question-bank shell is prepared for this set. Once content is loaded, this button can launch directly into the matching practice session.";
 });
 
 signOutButton.addEventListener("click", async () => {
@@ -524,6 +628,8 @@ onAuthStateChanged(auth, (user) => {
 
 setAuthMode("signin");
 applySettings();
+syncDifficultyRange();
+renderQuestionBankSelection();
 window.setInterval(updateCountdown, 1000);
 window.setTimeout(() => {
   body.dataset.phase = "splash";
