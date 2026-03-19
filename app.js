@@ -97,10 +97,18 @@ const authEmail = document.getElementById("auth-email");
 const authPassword = document.getElementById("auth-password");
 const jumpQuestionBankButton = document.getElementById("jump-question-bank");
 const suggestedNextCard = document.getElementById("suggested-next-card");
+const qbankUtilityButtons = Array.from(document.querySelectorAll(".qbank-utility"));
+const qbankFilterButtons = Array.from(document.querySelectorAll(".filter-pill"));
+const qbankTopicRows = Array.from(document.querySelectorAll(".topic-row"));
+const qbankTopicPanelButtons = Array.from(document.querySelectorAll(".topic-panel-button"));
+const qbankCurrentTitle = document.getElementById("qbank-current-title");
+const qbankCurrentCopy = document.getElementById("qbank-current-copy");
+const qbankStartButton = document.getElementById("qbank-start-button");
 
 let authMode = "signin";
 let splashFinished = false;
 let resolvedUser = null;
+let currentQuestionBankTopic = "";
 
 function getUserName(user) {
   return user?.displayName || user?.email?.split("@")[0] || "MasterED User";
@@ -248,6 +256,18 @@ function showQuestionBank(activeButton) {
   questionBankScreen.classList.add("active");
 }
 
+function setSingleActiveButton(buttons, activeButton) {
+  buttons.forEach((button) => {
+    button.classList.toggle("active", button === activeButton);
+  });
+}
+
+function updateQuestionBankSelection(topic, description) {
+  currentQuestionBankTopic = topic;
+  qbankCurrentTitle.textContent = topic;
+  qbankCurrentCopy.textContent = description;
+}
+
 function showCalculator(activeButton) {
   setActiveNav(activeButton);
   hideAllScreens();
@@ -385,6 +405,53 @@ jumpQuestionBankButton.addEventListener("click", () => {
 
 suggestedNextCard.addEventListener("click", () => {
   showQuestionBank();
+});
+
+qbankUtilityButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    setSingleActiveButton(qbankUtilityButtons, button);
+  });
+});
+
+qbankFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    button.classList.toggle("active");
+  });
+});
+
+qbankTopicRows.forEach((button) => {
+  button.addEventListener("click", () => {
+    setSingleActiveButton(qbankTopicRows, button);
+    updateQuestionBankSelection(
+      button.dataset.topic || button.querySelector("span")?.textContent || "Focused topic",
+      "This topic is selected. Question inventory is still empty right now, but the workflow, filters, and pacing surface are ready for real content."
+    );
+  });
+});
+
+qbankTopicPanelButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const panelTitle = button.closest(".topic-panel")?.querySelector("h2")?.textContent || "All topics";
+    updateQuestionBankSelection(
+      `${panelTitle} overview`,
+      `Browsing the full ${panelTitle.toLowerCase()} map. As questions are added, this panel can open every topic in one focused drill flow.`
+    );
+  });
+});
+
+qbankStartButton.addEventListener("click", () => {
+  if (!currentQuestionBankTopic) {
+    updateQuestionBankSelection(
+      "Choose a topic first",
+      "Select any topic row or subject overview to build a focused set. Right now the question counts are intentionally at zero until the bank is loaded."
+    );
+    return;
+  }
+
+  updateQuestionBankSelection(
+    `${currentQuestionBankTopic} ready`,
+    "The question-bank shell is prepared for this set. Once content is loaded, this button can launch directly into the matching practice session."
+  );
 });
 
 signOutButton.addEventListener("click", async () => {
