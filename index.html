@@ -533,11 +533,11 @@
               </aside>
 
               <div class="question-bank-topic-grid">
-                <section class="topic-panel english-panel">
+              <section class="topic-panel english-panel">
                 <div class="topic-panel-head">
                   <div>
                     <h2>English Reading and Writing</h2>
-                    <p>0 questions</p>
+                    <p id="rw-count-label">0 questions</p>
                   </div>
                   <button class="topic-panel-button" type="button">All topics</button>
                 </div>
@@ -609,7 +609,7 @@
                 <div class="topic-panel-head">
                   <div>
                     <h2>Math</h2>
-                    <p>0 questions</p>
+                    <p id="math-count-label">0 questions</p>
                   </div>
                   <button class="topic-panel-button" type="button">All topics</button>
                 </div>
@@ -686,6 +686,109 @@
           </div>
         </section>
 
+        <section class="screen practice-screen" id="screen-practice">
+          <div class="practice-shell">
+            <header class="practice-topbar">
+              <button class="practice-back" id="practice-back-button" type="button">Go back</button>
+              <div class="practice-timer-wrap">
+                <strong id="practice-timer">00:00</strong>
+              </div>
+              <div class="practice-tools">
+                <button class="practice-tool active" data-tool-tab="calculator" type="button">Calculator</button>
+                <button class="practice-tool" data-tool-tab="reference" type="button">Reference</button>
+                <button class="practice-tool" id="practice-fullscreen-button" type="button">Fullscreen</button>
+                <button class="practice-tool" id="practice-theme-button" type="button">Theme</button>
+              </div>
+            </header>
+
+            <div class="practice-main">
+              <aside class="practice-tools-panel">
+                <div class="tool-pane active" id="tool-pane-calculator">
+                  <div class="tool-pane-head">
+                    <strong>Calculator</strong>
+                    <div class="tool-switches">
+                      <button class="tool-switch active" data-calc-mode="graphing" type="button">Graphing</button>
+                      <button class="tool-switch" data-calc-mode="scientific" type="button">Scientific</button>
+                      <button class="tool-switch" id="tool-popout-button" type="button">Pop Out</button>
+                    </div>
+                  </div>
+                  <iframe
+                    id="desmos-frame"
+                    title="Desmos Graphing Calculator"
+                    src="https://www.desmos.com/calculator"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                  ></iframe>
+                </div>
+
+                <div class="tool-pane" id="tool-pane-reference">
+                  <div class="tool-pane-head">
+                    <strong>Question Info</strong>
+                  </div>
+                  <div class="question-info-card" id="question-info-card"></div>
+                </div>
+              </aside>
+
+              <section class="practice-question-panel">
+                <div class="question-status-row">
+                  <div class="question-index-badge" id="practice-index-badge">1</div>
+                  <div class="question-status-copy">
+                    <strong id="practice-subject-label">Math</strong>
+                    <span id="practice-skill-label">Linear equations in one variable</span>
+                  </div>
+                </div>
+
+                <div class="question-body">
+                  <p class="question-passage hidden" id="practice-passage"></p>
+                  <h2 id="practice-prompt">Loading question...</h2>
+                </div>
+
+                <div class="answer-zone">
+                  <div class="choice-list hidden" id="practice-choice-list"></div>
+                  <input class="practice-answer-input hidden" id="practice-answer-input" type="text" placeholder="Answer..." />
+                  <div class="answer-feedback" id="practice-feedback"></div>
+                </div>
+
+                <footer class="practice-action-bar">
+                  <button class="practice-mini-button" id="question-info-button" type="button">Info</button>
+                  <button class="practice-primary-button" id="lock-ai-button" type="button">Ask Lock</button>
+                  <button class="practice-secondary-button" id="explanation-button" type="button">Explanation</button>
+                  <button class="practice-check-button" id="check-answer-button" type="button">Check</button>
+                  <button class="practice-next-button" id="next-question-button" type="button">Next</button>
+                </footer>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen stats-live-screen" id="screen-stats-live">
+          <div class="stats-live-shell">
+            <div class="stats-live-header">
+              <div>
+                <span class="panel-label">Analytics</span>
+                <h1>Your real practice data</h1>
+              </div>
+            </div>
+            <div class="stats-live-grid">
+              <div class="stats-panel">
+                <h2>Accuracy by Subject</h2>
+                <div class="stats-bars" id="accuracy-bars"></div>
+              </div>
+              <div class="stats-panel">
+                <h2>Questions by Day</h2>
+                <div class="stats-timeline" id="timeline-bars"></div>
+              </div>
+              <div class="stats-panel wide">
+                <h2>Recent Activity Calendar</h2>
+                <div class="stats-calendar" id="stats-calendar"></div>
+              </div>
+              <div class="stats-panel wide">
+                <h2>Skill Accuracy</h2>
+                <div class="skill-stats-list" id="skill-stats-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="screen calculator-screen" id="screen-calculator">
           <div class="calculator-frame-wrap">
             <iframe
@@ -752,6 +855,11 @@
         </section>
       </main>
     </div>
+
+    <aside class="lock-panel" id="lock-panel">
+      <div class="lock-tabs" id="lock-tabs"></div>
+      <div class="lock-copy" id="lock-copy"></div>
+    </aside>
 
     <script type="module" src="./app.js"></script>
   </body>

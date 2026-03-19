@@ -8,8 +8,10 @@ import {
   signOut,
   updateProfile
 } from "./firebase-config.js";
+import { QUESTION_BANK, QUESTION_COUNTS } from "./question-bank-data.js";
 
 const STORAGE_KEY = "mastered-shell-settings-v2";
+const ANALYTICS_KEY = "mastered-analytics-v1";
 
 const satSchedule = [
   { value: "auto", label: "Automatic next official SAT" },
@@ -63,8 +65,10 @@ const navItems = Array.from(document.querySelectorAll(".nav-item"));
 const homeScreen = document.getElementById("screen-home");
 const blankScreen = document.getElementById("screen-blank");
 const questionBankScreen = document.getElementById("screen-question-bank");
+const practiceScreen = document.getElementById("screen-practice");
 const calculatorScreen = document.getElementById("screen-calculator");
 const settingsScreen = document.getElementById("screen-settings");
+const statsLiveScreen = document.getElementById("screen-stats-live");
 const countdownLabel = document.getElementById("next-sat-countdown");
 const countdownPill = document.querySelector(".countdown-pill");
 const profileTrigger = document.getElementById("profile-trigger");
@@ -112,6 +116,44 @@ const difficultyPanel = document.getElementById("difficulty-panel");
 const difficultyMin = document.getElementById("difficulty-min");
 const difficultyMax = document.getElementById("difficulty-max");
 const difficultyRangeLabel = document.getElementById("difficulty-range-label");
+const mathCountLabel = document.getElementById("math-count-label");
+const rwCountLabel = document.getElementById("rw-count-label");
+const qbankTotalCount = document.getElementById("qbank-total-count");
+const qbankReviewCount = document.getElementById("qbank-review-count");
+const qbankCompleteCount = document.getElementById("qbank-complete-count");
+const practiceBackButton = document.getElementById("practice-back-button");
+const practiceTimer = document.getElementById("practice-timer");
+const practiceSubjectLabel = document.getElementById("practice-subject-label");
+const practiceSkillLabel = document.getElementById("practice-skill-label");
+const practiceIndexBadge = document.getElementById("practice-index-badge");
+const practicePassage = document.getElementById("practice-passage");
+const practicePrompt = document.getElementById("practice-prompt");
+const practiceChoiceList = document.getElementById("practice-choice-list");
+const practiceAnswerInput = document.getElementById("practice-answer-input");
+const practiceFeedback = document.getElementById("practice-feedback");
+const questionInfoCard = document.getElementById("question-info-card");
+const questionInfoButton = document.getElementById("question-info-button");
+const lockAiButton = document.getElementById("lock-ai-button");
+const explanationButton = document.getElementById("explanation-button");
+const checkAnswerButton = document.getElementById("check-answer-button");
+const nextQuestionButton = document.getElementById("next-question-button");
+const practiceTools = Array.from(document.querySelectorAll(".practice-tool"));
+const toolPanes = {
+  calculator: document.getElementById("tool-pane-calculator"),
+  reference: document.getElementById("tool-pane-reference")
+};
+const calcSwitches = Array.from(document.querySelectorAll(".tool-switch[data-calc-mode]"));
+const desmosFrame = document.getElementById("desmos-frame");
+const toolPopoutButton = document.getElementById("tool-popout-button");
+const practiceFullscreenButton = document.getElementById("practice-fullscreen-button");
+const practiceThemeButton = document.getElementById("practice-theme-button");
+const accuracyBars = document.getElementById("accuracy-bars");
+const timelineBars = document.getElementById("timeline-bars");
+const statsCalendar = document.getElementById("stats-calendar");
+const skillStatsList = document.getElementById("skill-stats-list");
+const lockPanel = document.getElementById("lock-panel");
+const lockTabs = document.getElementById("lock-tabs");
+const lockCopy = document.getElementById("lock-copy");
 
 let authMode = "signin";
 let splashFinished = false;
@@ -119,6 +161,28 @@ let resolvedUser = null;
 let currentQuestionBankTopic = "";
 const selectedSubjects = new Set(["rw", "math"]);
 const selectedTopics = new Set();
+let practiceSet = [];
+let currentQuestionIndex = 0;
+let currentQuestion = null;
+let selectedChoiceId = "";
+let currentCalcMode = "graphing";
+let timerInterval = null;
+let questionStartTime = 0;
+let questionSolved = false;
+let analytics = loadAnalytics();
+
+function loadAnalytics() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(ANALYTICS_KEY) || "null");
+    return parsed || { attempts: [] };
+  } catch (error) {
+    return { attempts: [] };
+  }
+}
+
+function saveAnalytics() {
+  localStorage.setItem(ANALYTICS_KEY, JSON.stringify(analytics));
+}
 
 function getUserName(user) {
   return user?.displayName || user?.email?.split("@")[0] || "MasterED User";
@@ -234,6 +298,281 @@ function applySettings() {
   syncCalculatorTheme();
 }
 
+function formatTimerValue(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function startQuestionTimer() {
+  window.clearInterval(timerInterval);
+  questionStartTime = Date.now();
+  practiceTimer.textContent = "00:00";
+  timerInterval = window.setInterval(() => {
+    if (questionSolved) {
+      return;
+    }
+    const elapsed = Math.floor((Date.now() - questionStartTime) / 1000);
+    practiceTimer.textContent = formatTimerValue(elapsed);
+  }, 1000);
+}
+
+function stopQuestionTimer() {
+  const elapsed = Math.floor((Date.now() - questionStartTime) / 1000);
+  practiceTimer.textContent = formatTimerValue(elapsed);
+  window.clearInterval(timerInterval);
+  return elapsed;
+}
+
+function getFilteredQuestionPool() {
+  const pools = Array.from(selectedSubjects).flatMap((subject) => QUESTION_BANK[subject] || []);
+  const minDifficulty = Number(difficultyMin.value);
+  const maxDifficulty = Number(difficultyMax.value);
+
+  return pools.filter((question) => {
+    const matchesDifficulty = question.difficulty >= minDifficulty && question.difficulty <= maxDifficulty;
+    const matchesTopic =
+      selectedTopics.size === 0 ||
+      selectedTopics.has(question.domain) ||
+      selectedTopics.has(question.skill);
+    return matchesDifficulty && matchesTopic;
+  });
+}
+
+function renderQuestionInfo(question) {
+  questionInfoCard.innerHTML = `
+    <div class="info-grid">
+      <div><span>Section</span><strong>${question.subject === "math" ? "Math" : "Reading and Writing"}</strong></div>
+      <div><span>Difficulty</span><strong>${question.difficulty}</strong></div>
+      <div><span>Score Band</span><strong>${question.scoreBand}</strong></div>
+      <div><span>Domain</span><strong>${question.domain}</strong></div>
+      <div><span>Skill</span><strong>${question.skill}</strong></div>
+      <div><span>Platform Accuracy</span><strong>${question.platformAccuracy}%</strong></div>
+    </div>
+  `;
+}
+
+function renderLockContent(mode) {
+  if (!currentQuestion) {
+    return;
+  }
+
+  const subjectName = currentQuestion.subject === "math" ? "Math" : "Reading and Writing";
+  const tabs =
+    currentQuestion.subject === "math"
+      ? [
+          { id: "ask", label: "Ask Lock" },
+          { id: "concept", label: "Conceptual" },
+          { id: "desmos", label: "Desmos Quick Solve" }
+        ]
+      : [
+          { id: "ask", label: "Ask Lock" },
+          { id: "explain", label: "Fast Explanation" }
+        ];
+
+  lockTabs.innerHTML = tabs
+    .map((tab) => `<button class="lock-tab${tab.id === mode ? " active" : ""}" data-lock-tab="${tab.id}" type="button">${tab.label}</button>`)
+    .join("");
+
+  const bodyByMode = {
+    ask: `Lock AI sees this as a ${subjectName.toLowerCase()} question in ${currentQuestion.domain}. Start by identifying the exact skill: ${currentQuestion.skill}. Then focus only on the line that determines the answer, not every detail at once.`,
+    concept: `Conceptually, this question is testing ${currentQuestion.skill}. The fastest route is to identify the relationship being tested, set up the structure, and only then compute. ${currentQuestion.explanation}`,
+    desmos: `For a Desmos-style solve, translate the important expression into the calculator first, then compare the graph or numeric output to the answer target. ${currentQuestion.explanation}`,
+    explain: `The fastest English solve is to identify what the question is actually asking, eliminate any choice that changes the meaning, and keep the answer tied to the exact wording of the passage. ${currentQuestion.explanation}`
+  };
+
+  lockCopy.textContent = bodyByMode[mode] || currentQuestion.explanation;
+
+  Array.from(lockTabs.querySelectorAll(".lock-tab")).forEach((button) => {
+    button.addEventListener("click", () => renderLockContent(button.dataset.lockTab));
+  });
+}
+
+function openLockPanel(defaultMode = "ask") {
+  lockPanel.classList.add("active");
+  renderLockContent(defaultMode);
+}
+
+function recordAttempt(question, wasCorrect, secondsSpent) {
+  analytics.attempts.push({
+    id: question.id,
+    subject: question.subject,
+    domain: question.domain,
+    skill: question.skill,
+    date: new Date().toISOString(),
+    correct: wasCorrect,
+    secondsSpent
+  });
+  analytics.attempts = analytics.attempts.slice(-1000);
+  saveAnalytics();
+  renderStats();
+}
+
+function checkCurrentAnswer() {
+  if (!currentQuestion || questionSolved) {
+    return;
+  }
+
+  let userAnswer = "";
+  if (currentQuestion.format === "multiple-choice") {
+    const selected = currentQuestion.choices.find((choice) => choice.id === selectedChoiceId);
+    userAnswer = selected?.text || "";
+  } else {
+    userAnswer = practiceAnswerInput.value.trim();
+  }
+
+  const correct = userAnswer === currentQuestion.answer;
+  questionSolved = correct;
+  const elapsed = stopQuestionTimer();
+  practiceFeedback.textContent = correct ? "Correct. Timer stopped." : "Not quite yet. You can review the explanation or try again.";
+  practiceFeedback.className = `answer-feedback ${correct ? "correct" : "incorrect"}`;
+  if (correct) {
+    recordAttempt(currentQuestion, true, elapsed);
+  } else {
+    recordAttempt(currentQuestion, false, elapsed);
+  }
+}
+
+function renderPracticeQuestion() {
+  currentQuestion = practiceSet[currentQuestionIndex];
+  if (!currentQuestion) {
+    showQuestionBank();
+    return;
+  }
+
+  selectedChoiceId = "";
+  questionSolved = false;
+  practiceIndexBadge.textContent = String(currentQuestionIndex + 1);
+  practiceSubjectLabel.textContent = currentQuestion.subject === "math" ? "Math" : "Reading and Writing";
+  practiceSkillLabel.textContent = `${currentQuestion.domain} · ${currentQuestion.skill}`;
+  practicePrompt.textContent = currentQuestion.prompt;
+  practiceFeedback.textContent = "";
+  practiceFeedback.className = "answer-feedback";
+  renderQuestionInfo(currentQuestion);
+
+  if (currentQuestion.passage) {
+    practicePassage.classList.remove("hidden");
+    practicePassage.textContent = currentQuestion.passage;
+  } else {
+    practicePassage.classList.add("hidden");
+    practicePassage.textContent = "";
+  }
+
+  if (currentQuestion.format === "multiple-choice") {
+    practiceChoiceList.classList.remove("hidden");
+    practiceAnswerInput.classList.add("hidden");
+    practiceChoiceList.innerHTML = currentQuestion.choices
+      .map(
+        (choice) => `
+          <button class="choice-button" data-choice-id="${choice.id}" type="button">
+            <span class="choice-letter">${choice.id}</span>
+            <span>${choice.text}</span>
+          </button>
+        `
+      )
+      .join("");
+    Array.from(practiceChoiceList.querySelectorAll(".choice-button")).forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedChoiceId = button.dataset.choiceId || "";
+        Array.from(practiceChoiceList.querySelectorAll(".choice-button")).forEach((choiceButton) => {
+          choiceButton.classList.toggle("active", choiceButton === button);
+        });
+      });
+    });
+  } else {
+    practiceChoiceList.classList.add("hidden");
+    practiceChoiceList.innerHTML = "";
+    practiceAnswerInput.classList.remove("hidden");
+    practiceAnswerInput.value = "";
+  }
+
+  renderLockContent(currentQuestion.subject === "math" ? "ask" : "ask");
+  startQuestionTimer();
+}
+
+function openPracticeSet() {
+  practiceSet = getFilteredQuestionPool().slice(0, 40);
+  if (!practiceSet.length) {
+    qbankCurrentTitle.textContent = "No questions match yet";
+    qbankCurrentCopy.textContent = "Try widening the difficulty band or selecting fewer filters.";
+    return;
+  }
+  currentQuestionIndex = 0;
+  hideAllScreens();
+  practiceScreen.classList.add("active");
+  renderPracticeQuestion();
+}
+
+function renderStats() {
+  const attempts = analytics.attempts;
+  const bySubject = ["rw", "math"].map((subject) => {
+    const subset = attempts.filter((attempt) => attempt.subject === subject);
+    const accuracy = subset.length ? Math.round((subset.filter((attempt) => attempt.correct).length / subset.length) * 100) : 0;
+    return { label: subject === "rw" ? "Reading & Writing" : "Math", accuracy };
+  });
+
+  accuracyBars.innerHTML = bySubject
+    .map(
+      (row) => `
+        <div class="stats-bar-row">
+          <span>${row.label}</span>
+          <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${row.accuracy}%"></div></div>
+          <strong>${row.accuracy}%</strong>
+        </div>
+      `
+    )
+    .join("");
+
+  const dayMap = new Map();
+  attempts.forEach((attempt) => {
+    const day = new Date(attempt.date).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    dayMap.set(day, (dayMap.get(day) || 0) + 1);
+  });
+  const dayRows = Array.from(dayMap.entries()).slice(-7);
+  timelineBars.innerHTML = dayRows
+    .map(
+      ([day, total]) => `
+        <div class="timeline-row">
+          <span>${day}</span>
+          <div class="timeline-track"><div class="timeline-fill" style="width:${Math.min(100, total * 12)}%"></div></div>
+          <strong>${total}</strong>
+        </div>
+      `
+    )
+    .join("");
+
+  const cells = [];
+  for (let i = 27; i >= 0; i -= 1) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const key = date.toISOString().slice(0, 10);
+    const count = attempts.filter((attempt) => attempt.date.slice(0, 10) === key).length;
+    cells.push(`<div class="calendar-cell${count ? " active" : ""}" title="${key}: ${count} questions"></div>`);
+  }
+  statsCalendar.innerHTML = cells.join("");
+
+  const skillMap = new Map();
+  attempts.forEach((attempt) => {
+    const current = skillMap.get(attempt.skill) || { total: 0, correct: 0 };
+    current.total += 1;
+    current.correct += attempt.correct ? 1 : 0;
+    skillMap.set(attempt.skill, current);
+  });
+  skillStatsList.innerHTML = Array.from(skillMap.entries())
+    .slice(-8)
+    .map(([skill, stat]) => {
+      const accuracy = Math.round((stat.correct / stat.total) * 100);
+      return `
+        <div class="skill-stat-row">
+          <span>${skill}</span>
+          <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${accuracy}%"></div></div>
+          <strong>${accuracy}%</strong>
+        </div>
+      `;
+    })
+    .join("");
+}
+
 function setActiveNav(activeButton) {
   navItems.forEach((item) => {
     item.classList.toggle("active", item === activeButton);
@@ -244,8 +583,10 @@ function hideAllScreens() {
   homeScreen.classList.remove("active");
   blankScreen.classList.remove("active");
   questionBankScreen.classList.remove("active");
+  practiceScreen.classList.remove("active");
   calculatorScreen.classList.remove("active");
   settingsScreen.classList.remove("active");
+  statsLiveScreen.classList.remove("active");
 }
 
 function showHome() {
@@ -295,6 +636,16 @@ function renderQuestionBankSelection() {
   );
   const topicLabels = Array.from(selectedTopics);
   const difficultyText = difficultyRangeLabel.textContent;
+  const matchingCount = getFilteredQuestionPool().length;
+  const matchingAttempts = analytics.attempts.filter((attempt) => {
+    const sameSubject = selectedSubjects.has(attempt.subject);
+    const sameTopic = !selectedTopics.size || selectedTopics.has(attempt.domain) || selectedTopics.has(attempt.skill);
+    return sameSubject && sameTopic;
+  });
+
+  qbankTotalCount.textContent = matchingCount.toLocaleString();
+  qbankReviewCount.textContent = String(matchingAttempts.filter((attempt) => !attempt.correct).length);
+  qbankCompleteCount.textContent = String(matchingAttempts.filter((attempt) => attempt.correct).length);
 
   qbankSelectionPills.innerHTML = [
     ...subjectLabels.map((label) => `<span class="subject-pill">${label}</span>`),
@@ -323,6 +674,13 @@ function showCalculator(activeButton) {
   hideAllScreens();
   calculatorScreen.classList.add("active");
   syncCalculatorTheme();
+}
+
+function showStats(activeButton) {
+  setActiveNav(activeButton || navItems.find((item) => item.dataset.view === "stats"));
+  hideAllScreens();
+  statsLiveScreen.classList.add("active");
+  renderStats();
 }
 
 function showSettings() {
@@ -445,6 +803,11 @@ navItems.forEach((item) => {
       return;
     }
 
+    if (item.dataset.view === "stats") {
+      showStats(item);
+      return;
+    }
+
     showBlank(item);
   });
 });
@@ -556,6 +919,65 @@ qbankStartButton.addEventListener("click", () => {
   qbankCurrentTitle.textContent = `${currentQuestionBankTopic} ready`;
   qbankCurrentCopy.textContent =
     "The question-bank shell is prepared for this set. Once content is loaded, this button can launch directly into the matching practice session.";
+  openPracticeSet();
+});
+
+practiceBackButton.addEventListener("click", () => {
+  window.clearInterval(timerInterval);
+  showQuestionBank();
+});
+
+practiceTools.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (button.id === "practice-fullscreen-button") {
+      document.documentElement.requestFullscreen?.();
+      return;
+    }
+
+    if (button.id === "practice-theme-button") {
+      settings.theme = settings.theme === "dark" ? "light" : "dark";
+      applySettings();
+      return;
+    }
+
+    const tab = button.dataset.toolTab;
+    if (!tab) {
+      return;
+    }
+    practiceTools.forEach((tool) => tool.classList.toggle("active", tool === button));
+    Object.entries(toolPanes).forEach(([key, pane]) => {
+      pane.classList.toggle("active", key === tab);
+    });
+  });
+});
+
+calcSwitches.forEach((button) => {
+  button.addEventListener("click", () => {
+    currentCalcMode = button.dataset.calcMode || "graphing";
+    calcSwitches.forEach((switchButton) => switchButton.classList.toggle("active", switchButton === button));
+    desmosFrame.src = currentCalcMode === "scientific" ? "https://www.desmos.com/scientific" : "https://www.desmos.com/calculator";
+  });
+});
+
+toolPopoutButton.addEventListener("click", () => {
+  window.open(currentCalcMode === "scientific" ? "https://www.desmos.com/scientific" : "https://www.desmos.com/calculator", "_blank", "noopener");
+});
+
+questionInfoButton.addEventListener("click", () => {
+  practiceTools.forEach((tool) => tool.classList.toggle("active", tool.dataset.toolTab === "reference"));
+  toolPanes.calculator.classList.remove("active");
+  toolPanes.reference.classList.add("active");
+});
+
+lockAiButton.addEventListener("click", () => openLockPanel("ask"));
+explanationButton.addEventListener("click", () => openLockPanel(currentQuestion?.subject === "math" ? "concept" : "explain"));
+checkAnswerButton.addEventListener("click", checkCurrentAnswer);
+nextQuestionButton.addEventListener("click", () => {
+  if (!practiceSet.length) {
+    return;
+  }
+  currentQuestionIndex = (currentQuestionIndex + 1) % practiceSet.length;
+  renderPracticeQuestion();
 });
 
 signOutButton.addEventListener("click", async () => {
@@ -618,6 +1040,9 @@ document.addEventListener("click", (event) => {
   if (!event.target.closest(".profile-menu")) {
     closeProfileMenu();
   }
+  if (!event.target.closest(".lock-panel") && !event.target.closest("#lock-ai-button") && !event.target.closest("#explanation-button")) {
+    lockPanel.classList.remove("active");
+  }
 });
 
 onAuthStateChanged(auth, (user) => {
@@ -630,6 +1055,9 @@ setAuthMode("signin");
 applySettings();
 syncDifficultyRange();
 renderQuestionBankSelection();
+mathCountLabel.textContent = `${QUESTION_COUNTS.math.toLocaleString()} questions`;
+rwCountLabel.textContent = `${QUESTION_COUNTS.rw.toLocaleString()} questions`;
+renderStats();
 window.setInterval(updateCountdown, 1000);
 window.setTimeout(() => {
   body.dataset.phase = "splash";
