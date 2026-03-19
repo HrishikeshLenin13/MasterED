@@ -62,6 +62,7 @@ const heroLogoButton = document.getElementById("hero-logo-button");
 const navItems = Array.from(document.querySelectorAll(".nav-item"));
 const homeScreen = document.getElementById("screen-home");
 const blankScreen = document.getElementById("screen-blank");
+const questionBankScreen = document.getElementById("screen-question-bank");
 const calculatorScreen = document.getElementById("screen-calculator");
 const settingsScreen = document.getElementById("screen-settings");
 const countdownLabel = document.getElementById("next-sat-countdown");
@@ -94,6 +95,8 @@ const signInModeButton = document.getElementById("sign-in-mode");
 const signUpModeButton = document.getElementById("sign-up-mode");
 const authEmail = document.getElementById("auth-email");
 const authPassword = document.getElementById("auth-password");
+const jumpQuestionBankButton = document.getElementById("jump-question-bank");
+const suggestedNextCard = document.getElementById("suggested-next-card");
 
 let authMode = "signin";
 let splashFinished = false;
@@ -222,6 +225,7 @@ function setActiveNav(activeButton) {
 function hideAllScreens() {
   homeScreen.classList.remove("active");
   blankScreen.classList.remove("active");
+  questionBankScreen.classList.remove("active");
   calculatorScreen.classList.remove("active");
   settingsScreen.classList.remove("active");
 }
@@ -236,6 +240,12 @@ function showBlank(activeButton) {
   setActiveNav(activeButton);
   hideAllScreens();
   blankScreen.classList.add("active");
+}
+
+function showQuestionBank(activeButton) {
+  setActiveNav(activeButton || navItems.find((item) => item.dataset.view === "question-bank"));
+  hideAllScreens();
+  questionBankScreen.classList.add("active");
 }
 
 function showCalculator(activeButton) {
@@ -269,11 +279,13 @@ function setAuthMode(mode) {
 }
 
 function showAuth() {
+  body.dataset.phase = "auth";
   authView.classList.remove("hidden");
   appShell.classList.add("hidden");
 }
 
 function showApp() {
+  body.dataset.phase = "app";
   authView.classList.add("hidden");
   appShell.classList.remove("hidden");
   showHome();
@@ -353,6 +365,11 @@ navItems.forEach((item) => {
       return;
     }
 
+    if (item.dataset.view === "question-bank") {
+      showQuestionBank(item);
+      return;
+    }
+
     if (item.dataset.view === "predictor") {
       showCalculator(item);
       return;
@@ -360,6 +377,14 @@ navItems.forEach((item) => {
 
     showBlank(item);
   });
+});
+
+jumpQuestionBankButton.addEventListener("click", () => {
+  showQuestionBank();
+});
+
+suggestedNextCard.addEventListener("click", () => {
+  showQuestionBank();
 });
 
 signOutButton.addEventListener("click", async () => {
@@ -434,6 +459,7 @@ setAuthMode("signin");
 applySettings();
 window.setInterval(updateCountdown, 1000);
 window.setTimeout(() => {
+  body.dataset.phase = "splash";
   splashScreen.classList.add("fade-out");
   splashFinished = true;
   finishSplashIfReady();

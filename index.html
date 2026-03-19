@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body data-theme="light" data-nav-position="left">
+  <body data-theme="light" data-nav-position="left" data-phase="splash">
     <div class="splash-screen active" id="splash-screen" aria-hidden="true">
       <div class="splash-orbit">
         <div class="splash-core">
@@ -30,62 +30,200 @@
     </div>
 
     <section class="auth-view hidden" id="auth-view">
-      <div class="auth-panel auth-visual">
-        <button class="brand hero-brand" id="hero-logo-button" type="button">
-          <span class="brand-mark"></span>
-          <span class="brand-text">MasterED</span>
-        </button>
-        <div class="hero-copy">
-          <span class="hero-kicker">Digital SAT prep, cleaner</span>
-          <h2>Study in one place with a faster, calmer workflow.</h2>
-          <p>
-            Practice, review, time your sessions, and keep your prep dashboard synced without the clutter.
-          </p>
-        </div>
-        <div class="hero-stack">
-          <div class="hero-chip">Adaptive practice</div>
-          <div class="hero-chip">Accurate next SAT countdown</div>
-          <div class="hero-chip">Lock AI help</div>
-          <div class="hero-chip">Question bank and score tools</div>
-        </div>
-      </div>
+      <div class="marketing-shell">
+        <section class="marketing-hero">
+          <div class="marketing-topbar">
+            <button class="brand hero-brand" id="hero-logo-button" type="button">
+              <span class="brand-mark"></span>
+              <span class="brand-text">MasterED</span>
+            </button>
+            <a class="marketing-link" href="#auth-card-anchor">Get Started</a>
+          </div>
 
-      <div class="auth-panel auth-card">
-        <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
-          <button class="auth-mode-button active" id="sign-in-mode" type="button">Sign in</button>
-          <button class="auth-mode-button" id="sign-up-mode" type="button">Sign up</button>
-        </div>
+          <div class="marketing-hero-copy">
+            <span class="hero-kicker">Digital SAT prep, rethought from the ground up</span>
+            <h1>One clean system for practice, timing, review, analytics, and test-day confidence.</h1>
+            <p>
+              MasterED combines targeted drilling, full-length prep, timing data, score tools, Lock AI help, and a focused dashboard so your prep feels organized instead of overwhelming.
+            </p>
+            <div class="hero-cta-row">
+              <a class="hero-primary" href="#auth-card-anchor">Create your account</a>
+              <a class="hero-secondary" href="#feature-grid">Explore features</a>
+            </div>
+          </div>
 
-        <div class="auth-heading">
-          <h2 id="auth-title">Welcome back</h2>
-          <p id="auth-subtitle">Use your email and password or continue with Google.</p>
-        </div>
+          <div class="marketing-device-stage">
+            <div class="stage-orb orb-a"></div>
+            <div class="stage-orb orb-b"></div>
+            <div class="stage-panel stage-main">
+              <div class="stage-panel-header">
+                <span class="stage-chip">Adaptive prep</span>
+                <span class="stage-chip muted">Live analytics</span>
+              </div>
+              <div class="stage-graph">
+                <div class="stage-bars">
+                  <span style="height: 28%"></span>
+                  <span style="height: 44%"></span>
+                  <span style="height: 38%"></span>
+                  <span style="height: 74%"></span>
+                  <span style="height: 88%"></span>
+                </div>
+                <div class="stage-copy">
+                  <strong>Question flow that stays focused.</strong>
+                  <p>Move from mistakes to mastery without leaving the same workspace.</p>
+                </div>
+              </div>
+            </div>
+            <div class="stage-panel stage-side">
+              <div class="feature-mini-list">
+                <div><strong>10K+</strong><span>practice items</span></div>
+                <div><strong>Lock AI</strong><span>instant help</span></div>
+                <div><strong>Desmos</strong><span>always ready</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <form class="auth-form" id="auth-form">
-          <label class="auth-field">
-            <span>Email</span>
-            <input id="auth-email" type="email" placeholder="you@example.com" required />
-          </label>
+        <section class="feature-strip">
+          <div class="feature-strip-card">
+            <span>Question bank</span>
+            <strong>Target skills, difficulty, timing, and mistakes.</strong>
+          </div>
+          <div class="feature-strip-card">
+            <span>Full-length tests</span>
+            <strong>Train with pacing, modules, and score tools together.</strong>
+          </div>
+          <div class="feature-strip-card">
+            <span>Lock AI</span>
+            <strong>Get unstuck fast without breaking concentration.</strong>
+          </div>
+        </section>
 
-          <label class="auth-field">
-            <span>Password</span>
-            <input id="auth-password" type="password" placeholder="Enter your password" required />
-          </label>
+        <section class="feature-grid" id="feature-grid">
+          <article class="feature-showcase large">
+            <span class="panel-label">Feature system</span>
+            <h2>Everything important is in one workflow.</h2>
+            <p>
+              Drill a skill, review mistakes, watch timing trends, use Desmos, estimate scores, and jump back into the right next step without switching between five different tools.
+            </p>
+          </article>
+          <article class="feature-showcase">
+            <div class="showcase-icon">01</div>
+            <h3>Question bank</h3>
+            <p>Practice by section, topic, and pace with a faster review loop.</p>
+          </article>
+          <article class="feature-showcase">
+            <div class="showcase-icon">02</div>
+            <h3>Full-length prep</h3>
+            <p>Move from drills into tests with the same dashboard and progress context.</p>
+          </article>
+          <article class="feature-showcase">
+            <div class="showcase-icon">03</div>
+            <h3>Exact timing</h3>
+            <p>See how long each session and question type is actually taking you.</p>
+          </article>
+          <article class="feature-showcase">
+            <div class="showcase-icon">04</div>
+            <h3>Score calculator</h3>
+            <p>Estimate where your modules are putting you and adjust your plan quickly.</p>
+          </article>
+        </section>
 
-          <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
-        </form>
+        <section class="story-section">
+          <div class="story-copy">
+            <span class="panel-label">Why it feels better</span>
+            <h2>A calmer prep environment with more depth under the surface.</h2>
+            <p>
+              The goal is not just to show more features. It is to make hard prep feel lighter: fewer distractions, better visual hierarchy, cleaner tools, and sharper transitions between practice, review, and planning.
+            </p>
+          </div>
+          <div class="story-panels">
+            <div class="story-panel">
+              <strong>Focused dashboard</strong>
+              <span>See what matters next instead of sorting through clutter.</span>
+            </div>
+            <div class="story-panel">
+              <strong>Guided recovery</strong>
+              <span>Use mistakes, pacing, and AI help as one connected system.</span>
+            </div>
+            <div class="story-panel">
+              <strong>Better momentum</strong>
+              <span>Keep moving even when you switch from practice into full tests.</span>
+            </div>
+          </div>
+        </section>
 
-        <div class="auth-divider"><span>or</span></div>
+        <section class="auth-cta-section" id="auth-card-anchor">
+          <div class="auth-cta-copy">
+            <span class="panel-label">Get started</span>
+            <h2>Start with a clean account and bring everything into one place.</h2>
+            <p>
+              Sign in if you already have an account, or create one now with email and password or Google.
+            </p>
+            <ul class="auth-benefits">
+              <li>Personal dashboard and countdown</li>
+              <li>Settings, themes, and tab layout saved to your profile</li>
+              <li>Ready for question-bank and analytics storage next</li>
+            </ul>
+          </div>
 
-        <button class="google-button" id="google-auth-button" type="button">
-          <span class="google-icon" aria-hidden="true"></span>
-          <span id="google-auth-label">Continue with Google</span>
-        </button>
+          <div class="auth-panel auth-card">
+            <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
+              <button class="auth-mode-button active" id="sign-in-mode" type="button">Sign in</button>
+              <button class="auth-mode-button" id="sign-up-mode" type="button">Sign up</button>
+            </div>
 
-        <p class="auth-footer">
-          <span id="auth-footer-label">Need an account?</span>
-          <button class="auth-link-button" id="auth-switch-link" type="button">Create one</button>
-        </p>
+            <div class="auth-heading">
+              <h2 id="auth-title">Welcome back</h2>
+              <p id="auth-subtitle">Use your email and password or continue with Google.</p>
+            </div>
+
+            <form class="auth-form" id="auth-form">
+              <label class="auth-field">
+                <span>Email</span>
+                <input id="auth-email" type="email" placeholder="you@example.com" required />
+              </label>
+
+              <label class="auth-field">
+                <span>Password</span>
+                <input id="auth-password" type="password" placeholder="Enter your password" required />
+              </label>
+
+              <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
+            </form>
+
+            <div class="auth-divider"><span>or</span></div>
+
+            <button class="google-button" id="google-auth-button" type="button">
+              <span class="google-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.29h6.45a5.52 5.52 0 0 1-2.4 3.63v3.02h3.89c2.28-2.1 3.55-5.19 3.55-8.67Z"
+                    fill="#4285F4"
+                  />
+                  <path
+                    d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.89-3.02c-1.08.72-2.47 1.15-4.06 1.15-3.12 0-5.77-2.1-6.72-4.93H1.26v3.12A12 12 0 0 0 12 24Z"
+                    fill="#34A853"
+                  />
+                  <path
+                    d="M5.28 14.29A7.19 7.19 0 0 1 4.9 12c0-.79.14-1.56.38-2.29V6.59H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.41l4.02-3.12Z"
+                    fill="#FBBC05"
+                  />
+                  <path
+                    d="M12 4.77c1.76 0 3.35.61 4.6 1.8l3.45-3.45C17.95 1.16 15.24 0 12 0A12 12 0 0 0 1.26 6.59l4.02 3.12C6.23 6.87 8.88 4.77 12 4.77Z"
+                    fill="#EA4335"
+                  />
+                </svg>
+              </span>
+              <span id="google-auth-label">Continue with Google</span>
+            </button>
+
+            <p class="auth-footer">
+              <span id="auth-footer-label">Need an account?</span>
+              <button class="auth-link-button" id="auth-switch-link" type="button">Create one</button>
+            </p>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -183,10 +321,10 @@
                   <span>Current streak</span>
                   <strong>6 days</strong>
                 </div>
-                <div class="metric-card accent">
+                <button class="metric-card accent metric-button" id="suggested-next-card" type="button">
                   <span>Suggested next</span>
                   <strong>Question Bank</strong>
-                </div>
+                </button>
               </div>
             </div>
 
@@ -196,7 +334,7 @@
                   <h2>Jump Back In</h2>
                 </div>
 
-                <button class="resume-card" type="button">
+                <button class="resume-card" id="jump-question-bank" type="button">
                   <div class="resume-icon cyan">◔</div>
                   <div class="resume-copy">
                     <strong>Question Bank</strong>
@@ -286,6 +424,77 @@
 
         <section class="screen blank-screen" id="screen-blank">
           <div class="blank-inner"></div>
+        </section>
+
+        <section class="screen question-bank-screen" id="screen-question-bank">
+          <div class="question-bank-shell">
+            <div class="question-bank-header">
+              <div>
+                <span class="panel-label">Question Bank</span>
+                <h1>Train one skill at a time with better control.</h1>
+                <p>Choose a section, lock a topic, and jump straight into the right kind of practice.</p>
+              </div>
+              <button class="hero-primary question-bank-cta" type="button">Start Practice</button>
+            </div>
+
+            <div class="question-bank-grid">
+              <div class="question-bank-card filters-card">
+                <div class="card-header">
+                  <h2>Filters</h2>
+                </div>
+                <div class="filter-stack">
+                  <button class="filter-pill active" type="button">Reading and Writing</button>
+                  <button class="filter-pill" type="button">Math</button>
+                  <button class="filter-pill" type="button">Hard</button>
+                  <button class="filter-pill" type="button">Timed</button>
+                  <button class="filter-pill" type="button">Unseen</button>
+                  <button class="filter-pill" type="button">Mistakes</button>
+                </div>
+              </div>
+
+              <div class="question-bank-card practice-flow-card">
+                <div class="card-header">
+                  <h2>Practice Flow</h2>
+                </div>
+                <div class="practice-flow-list">
+                  <div class="practice-flow-row">
+                    <strong>Words in Context</strong>
+                    <span>126 questions</span>
+                  </div>
+                  <div class="practice-flow-row">
+                    <strong>Transitions</strong>
+                    <span>84 questions</span>
+                  </div>
+                  <div class="practice-flow-row">
+                    <strong>Linear Equations</strong>
+                    <span>142 questions</span>
+                  </div>
+                  <div class="practice-flow-row">
+                    <strong>Functions</strong>
+                    <span>101 questions</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="question-bank-card qbank-preview-card">
+                <div class="card-header">
+                  <h2>Recommended Set</h2>
+                </div>
+                <div class="question-preview-block">
+                  <span class="question-preview-tag">Reading and Writing</span>
+                  <strong>Inference and evidence pairing</strong>
+                  <p>10 questions, adaptive timing, explanations ready, Lock AI enabled.</p>
+                  <button class="resume-card compact" type="button">
+                    <div class="resume-copy">
+                      <strong>Open Set</strong>
+                      <span>Continue where you left off</span>
+                    </div>
+                    <div class="arrow">→</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section class="screen calculator-screen" id="screen-calculator">
