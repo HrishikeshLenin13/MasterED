@@ -44,6 +44,265 @@ function createRwQuestion({ id, domain, skill, scoreBand, difficulty, passage, p
   };
 }
 
+function createCuratedMathQuestions() {
+  return [
+    createMathQuestion({
+      id: "M-CUR-1",
+      domain: "Algebra",
+      skill: "Linear equations in one variable",
+      scoreBand: 6,
+      difficulty: 6,
+      prompt:
+        "In the equation (3x + 18) / 6 = k(x - 1), k is a constant. If the equation has infinitely many solutions, what is the value of k?",
+      answer: "1/2",
+      explanation:
+        "For infinitely many solutions, both sides must be equivalent for every x. The left side simplifies to x/2 + 3, so k must equal 1/2.",
+      choices: shuffleOptions("1/2", ["1/3", "2", "3"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-2",
+      domain: "Advanced Math",
+      skill: "Nonlinear functions",
+      scoreBand: 6,
+      difficulty: 5,
+      prompt:
+        "A quadratic function f has zeros at x = -3 and x = 5. Which expression could define f(x)?",
+      answer: "(x + 3)(x - 5)",
+      explanation:
+        "A quadratic with zeros at -3 and 5 factors as (x + 3)(x - 5), up to a nonzero constant multiple.",
+      choices: shuffleOptions("(x + 3)(x - 5)", ["(x - 3)(x + 5)", "(x + 3)(x + 5)", "(x - 3)(x - 5)"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-3",
+      domain: "Problem-Solving and Data Analysis",
+      skill: "Ratios, rates, proportional relationships, and units",
+      scoreBand: 5,
+      difficulty: 5,
+      prompt:
+        "A recipe uses flour and sugar in the ratio 5:2. If a baker uses 35 cups of flour, how many cups of sugar are needed to keep the ratio the same?",
+      answer: "14",
+      explanation:
+        "Since 35 is 7 times 5, multiply the sugar part 2 by 7. The baker needs 14 cups of sugar.",
+      choices: shuffleOptions("14", ["12", "10", "17"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-4",
+      domain: "Geometry and Trigonometry",
+      skill: "Area and volume",
+      scoreBand: 4,
+      difficulty: 4,
+      prompt:
+        "A cylinder has radius 3 and height 8. What is the volume of the cylinder, in terms of pi?",
+      answer: "72pi",
+      explanation:
+        "The volume of a cylinder is pi r^2 h. So the volume is pi(3^2)(8) = 72pi.",
+      choices: shuffleOptions("72pi", ["24pi", "48pi", "144pi"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-5",
+      domain: "Algebra",
+      skill: "Systems of two linear equations",
+      scoreBand: 6,
+      difficulty: 6,
+      prompt:
+        "If 2x + y = 13 and x - y = 2, what is the value of x?",
+      answer: "5",
+      explanation:
+        "Add the equations to eliminate y: 3x = 15, so x = 5.",
+      choices: shuffleOptions("5", ["3", "4", "6"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-6",
+      domain: "Advanced Math",
+      skill: "Equivalent expressions",
+      scoreBand: 5,
+      difficulty: 5,
+      prompt:
+        "Which expression is equivalent to 4x^2 - 25?",
+      answer: "(2x - 5)(2x + 5)",
+      explanation:
+        "This is a difference of squares: 4x^2 - 25 = (2x)^2 - 5^2 = (2x - 5)(2x + 5).",
+      choices: shuffleOptions("(2x - 5)(2x + 5)", ["(4x - 5)(x + 5)", "(2x - 5)^2", "(4x + 5)(x - 5)"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-7",
+      domain: "Geometry and Trigonometry",
+      skill: "Right triangles and trigonometry",
+      scoreBand: 5,
+      difficulty: 5,
+      prompt:
+        "A right triangle has legs 9 and 12. What is the length of the hypotenuse?",
+      answer: "15",
+      explanation:
+        "Use the Pythagorean theorem: c = sqrt(9^2 + 12^2) = sqrt(225) = 15.",
+      choices: shuffleOptions("15", ["13", "14", "21"])
+    }),
+    createMathQuestion({
+      id: "M-CUR-8",
+      domain: "Problem-Solving and Data Analysis",
+      skill: "Percentages",
+      scoreBand: 4,
+      difficulty: 4,
+      prompt:
+        "The price of a jacket is reduced by 20% from $75. What is the sale price of the jacket?",
+      answer: "60",
+      explanation:
+        "Twenty percent of 75 is 15. Subtract 15 from 75 to get 60.",
+      choices: shuffleOptions("60", ["55", "65", "70"])
+    })
+  ];
+}
+
+function createCuratedRwQuestions() {
+  return [
+    createRwQuestion({
+      id: "RW-CUR-1",
+      domain: "Craft and Structure",
+      skill: "Words in Context",
+      scoreBand: 6,
+      difficulty: 5,
+      passage:
+        "In her review of the exhibit, Morales notes that the curator's arrangement is restrained rather than flashy: each room highlights one visual idea, allowing visitors to notice subtle connections among the works.",
+      prompt: 'As used in the text, "restrained" most nearly means',
+      answer: "carefully controlled",
+      choices: shuffleOptions("carefully controlled", ["poorly funded", "widely admired", "strictly prohibited"]),
+      explanation:
+        'The passage contrasts "restrained" with "flashy," so the best meaning is "carefully controlled."'
+    }),
+    createRwQuestion({
+      id: "RW-CUR-2",
+      domain: "Information and Ideas",
+      skill: "Command of Evidence",
+      scoreBand: 6,
+      difficulty: 5,
+      passage:
+        "Researchers studying a wetland restoration project found that native bird populations rose steadily over four years. The increase began only after water levels became more stable and dense shoreline plants returned.",
+      prompt:
+        "Which choice best states the main support for the claim that the restoration improved habitat quality?",
+      answer: "Bird populations increased after stable water levels and shoreline plants returned.",
+      choices: shuffleOptions(
+        "Bird populations increased after stable water levels and shoreline plants returned.",
+        [
+          "The wetland project lasted four years.",
+          "Researchers visited the wetland every month.",
+          "Some birds had previously migrated through the area."
+        ]
+      ),
+      explanation:
+        "The passage directly connects the return of habitat features with a sustained increase in bird populations."
+    }),
+    createRwQuestion({
+      id: "RW-CUR-3",
+      domain: "Expression of Ideas",
+      skill: "Transitions",
+      scoreBand: 4,
+      difficulty: 4,
+      passage:
+        "Nadia originally planned to study only the bridge's exterior design. She later added an analysis of how the bridge changed commuting patterns in nearby neighborhoods. ___, her final paper discussed both engineering and local history.",
+      prompt: "Which choice completes the text with the most logical transition?",
+      answer: "As a result",
+      choices: shuffleOptions("As a result", ["For instance", "Nevertheless", "Instead"]),
+      explanation:
+        "The second sentence describes a change in scope that leads to the broader final paper, so a result transition is appropriate."
+    }),
+    createRwQuestion({
+      id: "RW-CUR-4",
+      domain: "Standard English Conventions",
+      skill: "Boundaries",
+      scoreBand: 4,
+      difficulty: 4,
+      passage:
+        "The astronomer reviewed the latest images from the observatory. She concluded that the newly identified object was not a comet but a distant galaxy.",
+      prompt:
+        "Which choice completes the sentence so that it conforms to the conventions of Standard English? The astronomer reviewed the latest images from the observatory; she concluded that the newly identified object was not a comet ___ a distant galaxy.",
+      answer: "but rather",
+      choices: shuffleOptions("but rather", ["but, rather", "but rather,", "rather but"]),
+      explanation:
+        'The idiomatic and grammatically complete construction is "not ... but rather ..."'
+    }),
+    createRwQuestion({
+      id: "RW-CUR-5",
+      domain: "Expression of Ideas",
+      skill: "Rhetorical Synthesis",
+      scoreBand: 5,
+      difficulty: 5,
+      passage:
+        "A student is writing about a school robotics team. The notes say the team introduced peer mentoring, doubled membership in one year, and won an award for community outreach.",
+      prompt:
+        "Which choice most effectively uses the notes to emphasize the team's growth and community impact?",
+      answer:
+        "After introducing peer mentoring, the robotics team doubled its membership and later earned recognition for its community outreach.",
+      choices: shuffleOptions(
+        "After introducing peer mentoring, the robotics team doubled its membership and later earned recognition for its community outreach.",
+        [
+          "The robotics team met after school and participated in several competitions during the year.",
+          "Although the robotics team won an award, its membership stayed about the same.",
+          "Peer mentoring was one of many ideas discussed by the robotics team over the year."
+        ]
+      ),
+      explanation:
+        "The correct choice integrates all three notes while focusing on both growth and community impact."
+    }),
+    createRwQuestion({
+      id: "RW-CUR-6",
+      domain: "Information and Ideas",
+      skill: "Central Ideas and Details",
+      scoreBand: 6,
+      difficulty: 6,
+      passage:
+        "Historian Mei Chen argues that the port city's significance came not from its size alone but from the unusual mix of traders who passed through it. Because merchants carried legal customs, design ideas, and scientific tools as well as goods, the city became a place where local practices changed quickly.",
+      prompt: "Which choice best states the main idea of the text?",
+      answer:
+        "The city's importance came from cultural exchange created by the variety of merchants who traveled there.",
+      choices: shuffleOptions(
+        "The city's importance came from cultural exchange created by the variety of merchants who traveled there.",
+        [
+          "The city was historically important because it was larger than neighboring ports.",
+          "The city declined after merchants stopped carrying scientific tools there.",
+          "The city resisted change because local customs remained stronger than outside influence."
+        ]
+      ),
+      explanation:
+        "The passage focuses on how diverse merchants brought more than goods, causing rapid cultural and practical change."
+    }),
+    createRwQuestion({
+      id: "RW-CUR-7",
+      domain: "Craft and Structure",
+      skill: "Text Structure and Purpose",
+      scoreBand: 5,
+      difficulty: 5,
+      passage:
+        "The first paragraph introduces an older theory about coral growth. The next paragraph describes a recent study that explains why the older theory could not account for growth patterns during unusually warm years.",
+      prompt: "What is the primary function of the second paragraph?",
+      answer: "To present evidence that revises an earlier explanation",
+      choices: shuffleOptions(
+        "To present evidence that revises an earlier explanation",
+        [
+          "To provide a historical background unrelated to the theory",
+          "To summarize the methods used in every coral study",
+          "To argue that the older theory remains fully correct"
+        ]
+      ),
+      explanation:
+        "The second paragraph introduces a study that changes how the earlier theory should be understood."
+    }),
+    createRwQuestion({
+      id: "RW-CUR-8",
+      domain: "Standard English Conventions",
+      skill: "Form, Structure, and Sense",
+      scoreBand: 5,
+      difficulty: 5,
+      passage:
+        "The novelist's earliest drafts were expansive and loosely organized. The published version, however, is concise, carefully paced, and far more ___ for readers encountering the story for the first time.",
+      prompt: "Which choice completes the text so that it conforms to the conventions of Standard English?",
+      answer: "accessible",
+      choices: shuffleOptions("accessible", ["access", "accessibly", "accessing"]),
+      explanation:
+        'After "far more," the sentence needs an adjective describing the published version, so "accessible" is correct.'
+    })
+  ];
+}
+
 function generateMathQuestions() {
   const questions = [];
   let idCounter = 1;
@@ -366,8 +625,8 @@ function generateReadingWritingQuestions() {
 }
 
 export const QUESTION_BANK = {
-  math: generateMathQuestions(),
-  rw: generateReadingWritingQuestions()
+  math: [...createCuratedMathQuestions(), ...generateMathQuestions()].slice(0, 1000),
+  rw: [...createCuratedRwQuestions(), ...generateReadingWritingQuestions()].slice(0, 1000)
 };
 
 export const QUESTION_COUNTS = {

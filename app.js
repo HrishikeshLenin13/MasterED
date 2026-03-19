@@ -170,6 +170,7 @@ let timerInterval = null;
 let questionStartTime = 0;
 let questionSolved = false;
 let analytics = loadAnalytics();
+let immersivePractice = false;
 
 function loadAnalytics() {
   try {
@@ -291,6 +292,7 @@ function applySettings() {
   body.dataset.theme = settings.theme;
   body.dataset.navPosition = settings.navPosition;
   body.dataset.navLabels = settings.iconsOnlyTabs ? "icons" : "full";
+  body.dataset.practice = immersivePractice ? "active" : "inactive";
   document.documentElement.style.setProperty("--accent", settings.accentColor);
   updateCountdown();
   syncSettingsUI();
@@ -422,11 +424,12 @@ function checkCurrentAnswer() {
   }
 
   const correct = userAnswer === currentQuestion.answer;
-  questionSolved = correct;
-  const elapsed = stopQuestionTimer();
+  const elapsed = Math.floor((Date.now() - questionStartTime) / 1000);
   practiceFeedback.textContent = correct ? "Correct. Timer stopped." : "Not quite yet. You can review the explanation or try again.";
   practiceFeedback.className = `answer-feedback ${correct ? "correct" : "incorrect"}`;
   if (correct) {
+    questionSolved = true;
+    stopQuestionTimer();
     recordAttempt(currentQuestion, true, elapsed);
   } else {
     recordAttempt(currentQuestion, false, elapsed);
@@ -491,15 +494,19 @@ function renderPracticeQuestion() {
 }
 
 function openPracticeSet() {
-  practiceSet = getFilteredQuestionPool().slice(0, 40);
+  practiceSet = getFilteredQuestionPool()
+    .sort((left, right) => right.difficulty - left.difficulty || left.id.localeCompare(right.id))
+    .slice(0, 40);
   if (!practiceSet.length) {
     qbankCurrentTitle.textContent = "No questions match yet";
     qbankCurrentCopy.textContent = "Try widening the difficulty band or selecting fewer filters.";
     return;
   }
   currentQuestionIndex = 0;
+  immersivePractice = true;
   hideAllScreens();
   practiceScreen.classList.add("active");
+  applySettings();
   renderPracticeQuestion();
 }
 
@@ -590,18 +597,24 @@ function hideAllScreens() {
 }
 
 function showHome() {
+  immersivePractice = false;
+  applySettings();
   setActiveNav(navItems.find((item) => item.dataset.view === "home"));
   hideAllScreens();
   homeScreen.classList.add("active");
 }
 
 function showBlank(activeButton) {
+  immersivePractice = false;
+  applySettings();
   setActiveNav(activeButton);
   hideAllScreens();
   blankScreen.classList.add("active");
 }
 
 function showQuestionBank(activeButton) {
+  immersivePractice = false;
+  applySettings();
   setActiveNav(activeButton || navItems.find((item) => item.dataset.view === "question-bank"));
   hideAllScreens();
   questionBankScreen.classList.add("active");
@@ -670,6 +683,8 @@ function renderQuestionBankSelection() {
 }
 
 function showCalculator(activeButton) {
+  immersivePractice = false;
+  applySettings();
   setActiveNav(activeButton);
   hideAllScreens();
   calculatorScreen.classList.add("active");
@@ -677,6 +692,8 @@ function showCalculator(activeButton) {
 }
 
 function showStats(activeButton) {
+  immersivePractice = false;
+  applySettings();
   setActiveNav(activeButton || navItems.find((item) => item.dataset.view === "stats"));
   hideAllScreens();
   statsLiveScreen.classList.add("active");
@@ -684,6 +701,8 @@ function showStats(activeButton) {
 }
 
 function showSettings() {
+  immersivePractice = false;
+  applySettings();
   navItems.forEach((item) => item.classList.remove("active"));
   hideAllScreens();
   settingsScreen.classList.add("active");
