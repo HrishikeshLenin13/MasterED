@@ -156,7 +156,7 @@
         <section class="auth-cta-section" id="auth-card-anchor">
           <div class="auth-cta-copy">
             <span class="panel-label">Get started</span>
-            <h2>Start with a clean account and bring everything into one place.</h2>
+            <h2>Start with a workspace that feels calm, fast, and built for deep prep.</h2>
             <p>
               Sign in if you already have an account, or create one now with email and password or Google.
             </p>
@@ -167,61 +167,85 @@
             </ul>
           </div>
 
-          <div class="auth-panel auth-card">
-            <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
-              <button class="auth-mode-button active" id="sign-in-mode" type="button">Sign in</button>
-              <button class="auth-mode-button" id="sign-up-mode" type="button">Sign up</button>
+          <div class="auth-stack">
+            <div class="auth-preview-panel">
+              <div class="auth-preview-top">
+                <span class="panel-label">Inside MasterED</span>
+                <div class="auth-preview-badge">Refined for focused prep</div>
+              </div>
+              <div class="auth-preview-grid">
+                <article class="auth-preview-card large">
+                  <span class="preview-dot"></span>
+                  <strong>Question Bank</strong>
+                  <p>Filter by skill, difficulty, time, and mistakes without leaving the same workflow.</p>
+                </article>
+                <article class="auth-preview-card">
+                  <strong>Lock AI</strong>
+                  <p>Get quick help and strategy without derailing your pacing.</p>
+                </article>
+                <article class="auth-preview-card">
+                  <strong>Adaptive Prep</strong>
+                  <p>Move between drills, timing, and score tools in a single surface.</p>
+                </article>
+              </div>
             </div>
 
-            <div class="auth-heading">
-              <h2 id="auth-title">Welcome back</h2>
-              <p id="auth-subtitle">Use your email and password or continue with Google.</p>
+            <div class="auth-panel auth-card">
+              <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
+                <button class="auth-mode-button active" id="sign-in-mode" type="button">Sign in</button>
+                <button class="auth-mode-button" id="sign-up-mode" type="button">Sign up</button>
+              </div>
+
+              <div class="auth-heading">
+                <h2 id="auth-title">Welcome back</h2>
+                <p id="auth-subtitle">Use your email and password or continue with Google.</p>
+              </div>
+
+              <form class="auth-form" id="auth-form">
+                <label class="auth-field">
+                  <span>Email</span>
+                  <input id="auth-email" type="email" placeholder="you@example.com" required />
+                </label>
+
+                <label class="auth-field">
+                  <span>Password</span>
+                  <input id="auth-password" type="password" placeholder="Enter your password" required />
+                </label>
+
+                <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
+              </form>
+
+              <div class="auth-divider"><span>or</span></div>
+
+              <button class="google-button" id="google-auth-button" type="button">
+                <span class="google-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.29h6.45a5.52 5.52 0 0 1-2.4 3.63v3.02h3.89c2.28-2.1 3.55-5.19 3.55-8.67Z"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.89-3.02c-1.08.72-2.47 1.15-4.06 1.15-3.12 0-5.77-2.1-6.72-4.93H1.26v3.12A12 12 0 0 0 12 24Z"
+                      fill="#34A853"
+                    />
+                    <path
+                      d="M5.28 14.29A7.19 7.19 0 0 1 4.9 12c0-.79.14-1.56.38-2.29V6.59H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.41l4.02-3.12Z"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M12 4.77c1.76 0 3.35.61 4.6 1.8l3.45-3.45C17.95 1.16 15.24 0 12 0A12 12 0 0 0 1.26 6.59l4.02 3.12C6.23 6.87 8.88 4.77 12 4.77Z"
+                      fill="#EA4335"
+                    />
+                  </svg>
+                </span>
+                <span id="google-auth-label">Continue with Google</span>
+              </button>
+
+              <p class="auth-footer">
+                <span id="auth-footer-label">Need an account?</span>
+                <button class="auth-link-button" id="auth-switch-link" type="button">Create one</button>
+              </p>
             </div>
-
-            <form class="auth-form" id="auth-form">
-              <label class="auth-field">
-                <span>Email</span>
-                <input id="auth-email" type="email" placeholder="you@example.com" required />
-              </label>
-
-              <label class="auth-field">
-                <span>Password</span>
-                <input id="auth-password" type="password" placeholder="Enter your password" required />
-              </label>
-
-              <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
-            </form>
-
-            <div class="auth-divider"><span>or</span></div>
-
-            <button class="google-button" id="google-auth-button" type="button">
-              <span class="google-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M23.49 12.27c0-.79-.07-1.54-.2-2.27H12v4.29h6.45a5.52 5.52 0 0 1-2.4 3.63v3.02h3.89c2.28-2.1 3.55-5.19 3.55-8.67Z"
-                    fill="#4285F4"
-                  />
-                  <path
-                    d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.89-3.02c-1.08.72-2.47 1.15-4.06 1.15-3.12 0-5.77-2.1-6.72-4.93H1.26v3.12A12 12 0 0 0 12 24Z"
-                    fill="#34A853"
-                  />
-                  <path
-                    d="M5.28 14.29A7.19 7.19 0 0 1 4.9 12c0-.79.14-1.56.38-2.29V6.59H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.41l4.02-3.12Z"
-                    fill="#FBBC05"
-                  />
-                  <path
-                    d="M12 4.77c1.76 0 3.35.61 4.6 1.8l3.45-3.45C17.95 1.16 15.24 0 12 0A12 12 0 0 0 1.26 6.59l4.02 3.12C6.23 6.87 8.88 4.77 12 4.77Z"
-                    fill="#EA4335"
-                  />
-                </svg>
-              </span>
-              <span id="google-auth-label">Continue with Google</span>
-            </button>
-
-            <p class="auth-footer">
-              <span id="auth-footer-label">Need an account?</span>
-              <button class="auth-link-button" id="auth-switch-link" type="button">Create one</button>
-            </p>
           </div>
         </section>
       </div>
@@ -428,71 +452,179 @@
 
         <section class="screen question-bank-screen" id="screen-question-bank">
           <div class="question-bank-shell">
-            <div class="question-bank-header">
-              <div>
-                <span class="panel-label">Question Bank</span>
-                <h1>Train one skill at a time with better control.</h1>
-                <p>Choose a section, lock a topic, and jump straight into the right kind of practice.</p>
+            <div class="question-bank-topbar">
+              <div class="question-bank-title">
+                <span class="qbank-mark"></span>
+                <div>
+                  <span class="panel-label">Question Bank</span>
+                  <h1>Sharper practice, cleaner control.</h1>
+                </div>
               </div>
-              <button class="hero-primary question-bank-cta" type="button">Start Practice</button>
+              <div class="question-bank-actions">
+                <button class="qbank-utility active" type="button">Filters</button>
+                <button class="qbank-utility" type="button">Shuffle</button>
+                <button class="qbank-utility" type="button">Recent mistakes</button>
+              </div>
             </div>
 
-            <div class="question-bank-grid">
-              <div class="question-bank-card filters-card">
-                <div class="card-header">
-                  <h2>Filters</h2>
-                </div>
-                <div class="filter-stack">
-                  <button class="filter-pill active" type="button">Reading and Writing</button>
-                  <button class="filter-pill" type="button">Math</button>
-                  <button class="filter-pill" type="button">Hard</button>
-                  <button class="filter-pill" type="button">Timed</button>
-                  <button class="filter-pill" type="button">Unseen</button>
-                  <button class="filter-pill" type="button">Mistakes</button>
-                </div>
-              </div>
+            <div class="question-bank-filter-row">
+              <button class="filter-pill active" type="button">Active Questions</button>
+              <button class="filter-pill" type="button">Difficulty</button>
+              <button class="filter-pill" type="button">Timed</button>
+              <button class="filter-pill" type="button">Marked</button>
+              <button class="filter-pill" type="button">Solved</button>
+              <button class="filter-pill" type="button">Incorrect</button>
+            </div>
 
-              <div class="question-bank-card practice-flow-card">
-                <div class="card-header">
-                  <h2>Practice Flow</h2>
+            <div class="question-bank-panels">
+              <section class="topic-panel english-panel">
+                <div class="topic-panel-head">
+                  <div>
+                    <h2>English Reading and Writing</h2>
+                    <p>1,587 questions</p>
+                  </div>
+                  <button class="topic-panel-button" type="button">All topics</button>
                 </div>
-                <div class="practice-flow-list">
-                  <div class="practice-flow-row">
-                    <strong>Words in Context</strong>
-                    <span>126 questions</span>
-                  </div>
-                  <div class="practice-flow-row">
-                    <strong>Transitions</strong>
-                    <span>84 questions</span>
-                  </div>
-                  <div class="practice-flow-row">
-                    <strong>Linear Equations</strong>
-                    <span>142 questions</span>
-                  </div>
-                  <div class="practice-flow-row">
-                    <strong>Functions</strong>
-                    <span>101 questions</span>
-                  </div>
-                </div>
-              </div>
 
-              <div class="question-bank-card qbank-preview-card">
-                <div class="card-header">
-                  <h2>Recommended Set</h2>
-                </div>
-                <div class="question-preview-block">
-                  <span class="question-preview-tag">Reading and Writing</span>
-                  <strong>Inference and evidence pairing</strong>
-                  <p>10 questions, adaptive timing, explanations ready, Lock AI enabled.</p>
-                  <button class="resume-card compact" type="button">
-                    <div class="resume-copy">
-                      <strong>Open Set</strong>
-                      <span>Continue where you left off</span>
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Craft and Structure</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">3</span>
+                      <span class="count-chip done">19</span>
+                      <span>412 questions</span>
                     </div>
-                    <div class="arrow">→</div>
-                  </button>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Cross-Text Connections</span><span>56 questions</span></button>
+                    <button class="topic-row" type="button"><span>Text Structure and Purpose</span><span>130 questions</span></button>
+                    <button class="topic-row" type="button"><span>Words in Context</span><span>226 questions</span></button>
+                  </div>
                 </div>
-              </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Expression of Ideas</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">1</span>
+                      <span class="count-chip done">17</span>
+                      <span>343 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Rhetorical Synthesis</span><span>182 questions</span></button>
+                    <button class="topic-row" type="button"><span>Transitions</span><span>161 questions</span></button>
+                  </div>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Information and Ideas</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">7</span>
+                      <span class="count-chip done">31</span>
+                      <span>475 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Central Ideas and Details</span><span>116 questions</span></button>
+                    <button class="topic-row" type="button"><span>Command of Evidence</span><span>242 questions</span></button>
+                    <button class="topic-row" type="button"><span>Inferences</span><span>117 questions</span></button>
+                  </div>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Standard English Conventions</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">1</span>
+                      <span class="count-chip done">14</span>
+                      <span>357 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Boundaries</span><span>180 questions</span></button>
+                    <button class="topic-row" type="button"><span>Form, Structure, and Sense</span><span>177 questions</span></button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="topic-panel math-panel">
+                <div class="topic-panel-head">
+                  <div>
+                    <h2>Math</h2>
+                    <p>1,700 questions</p>
+                  </div>
+                  <button class="topic-panel-button" type="button">All topics</button>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Algebra</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">23</span>
+                      <span class="count-chip done">213</span>
+                      <span>569 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Linear equations in one variable</span><span>106 questions</span></button>
+                    <button class="topic-row" type="button"><span>Linear functions</span><span>152 questions</span></button>
+                    <button class="topic-row" type="button"><span>Systems of two linear equations</span><span>112 questions</span></button>
+                    <button class="topic-row" type="button"><span>Linear inequalities in one or two variables</span><span>73 questions</span></button>
+                  </div>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Advanced Math</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">10</span>
+                      <span class="count-chip done">103</span>
+                      <span>479 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Equivalent expressions</span><span>102 questions</span></button>
+                    <button class="topic-row" type="button"><span>Nonlinear equations and systems</span><span>148 questions</span></button>
+                    <button class="topic-row" type="button"><span>Nonlinear functions</span><span>229 questions</span></button>
+                  </div>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Problem-Solving and Data Analysis</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">2</span>
+                      <span class="count-chip done">22</span>
+                      <span>383 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Ratios, rates, proportional relationships, and units</span><span>86 questions</span></button>
+                    <button class="topic-row" type="button"><span>Percentages</span><span>78 questions</span></button>
+                    <button class="topic-row" type="button"><span>Models and scatterplots</span><span>63 questions</span></button>
+                    <button class="topic-row" type="button"><span>Probability and conditional probability</span><span>46 questions</span></button>
+                  </div>
+                </div>
+
+                <div class="topic-cluster">
+                  <div class="topic-cluster-head">
+                    <h3>Geometry and Trigonometry</h3>
+                    <div class="topic-cluster-stats">
+                      <span class="count-chip review">5</span>
+                      <span class="count-chip done">15</span>
+                      <span>269 questions</span>
+                    </div>
+                  </div>
+                  <div class="topic-list">
+                    <button class="topic-row" type="button"><span>Area and volume</span><span>86 questions</span></button>
+                    <button class="topic-row" type="button"><span>Lines, angles, and triangles</span><span>79 questions</span></button>
+                    <button class="topic-row" type="button"><span>Right triangles and trigonometry</span><span>54 questions</span></button>
+                    <button class="topic-row" type="button"><span>Circles</span><span>50 questions</span></button>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
         </section>
