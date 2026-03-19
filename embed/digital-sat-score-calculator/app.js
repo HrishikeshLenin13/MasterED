@@ -22,13 +22,53 @@ const mathScoreEl = document.getElementById("math-score");
 const sectionConfig = {
   rw: {
     threshold: 19,
-    easierCeiling: 600,
+    easierCeiling: 620,
     fullRangeMax: 800,
+    easierCurve: [
+      [0.0, 200],
+      [0.15, 260],
+      [0.3, 340],
+      [0.45, 420],
+      [0.6, 500],
+      [0.75, 570],
+      [0.9, 610],
+      [1.0, 620],
+    ],
+    harderCurve: [
+      [0.0, 200],
+      [0.15, 310],
+      [0.3, 420],
+      [0.45, 540],
+      [0.6, 650],
+      [0.75, 730],
+      [0.9, 780],
+      [1.0, 800],
+    ],
   },
   math: {
     threshold: 15,
-    easierCeiling: 690,
+    easierCeiling: 700,
     fullRangeMax: 800,
+    easierCurve: [
+      [0.0, 200],
+      [0.15, 280],
+      [0.3, 370],
+      [0.45, 470],
+      [0.6, 560],
+      [0.75, 640],
+      [0.9, 690],
+      [1.0, 700],
+    ],
+    harderCurve: [
+      [0.0, 200],
+      [0.15, 320],
+      [0.3, 440],
+      [0.45, 560],
+      [0.6, 670],
+      [0.75, 745],
+      [0.9, 790],
+      [1.0, 800],
+    ],
   },
 };
 
@@ -38,6 +78,25 @@ function clamp(value, min, max) {
 
 function roundToTen(value) {
   return Math.round(value / 10) * 10;
+}
+
+function interpolateCurve(curve, value) {
+  if (value <= curve[0][0]) {
+    return curve[0][1];
+  }
+
+  for (let index = 1; index < curve.length; index += 1) {
+    const [rightX, rightY] = curve[index];
+    const [leftX, leftY] = curve[index - 1];
+
+    if (value <= rightX) {
+      const span = rightX - leftX || 1;
+      const progress = (value - leftX) / span;
+      return leftY + (rightY - leftY) * progress;
+    }
+  }
+
+  return curve[curve.length - 1][1];
 }
 
 function getModuleValue(key) {
@@ -52,23 +111,23 @@ function scoreSection(module1, module2, max1, max2, adaptive, sectionKey) {
   const pct2 = module2 / max2;
   const rawTotal = module1 + module2;
   const maxTotal = max1 + max2;
+  const weighted = pct1 * 0.44 + pct2 * 0.56;
+  const routeGain = Math.max(-0.08, Math.min(0.12, pct2 - pct1));
 
   if (!adaptive) {
-    const linear = 200 + Math.pow(rawTotal / maxTotal, 0.92) * 600;
-    return clamp(roundToTen(linear), 200, 800);
+    const blended = rawTotal / maxTotal;
+    const estimated = interpolateCurve(config.harderCurve, blended * 0.92) - 20;
+    return clamp(roundToTen(estimated), 200, 800);
   }
 
   const hardRoute = module1 >= config.threshold;
-  const weighted = pct1 * 0.44 + pct2 * 0.56;
-  const routeGain = Math.max(0, pct2 - pct1);
 
   if (hardRoute) {
-    const harderScore = 200 + Math.pow(weighted, 0.84) * 600 + routeGain * 35;
+    const harderScore = interpolateCurve(config.harderCurve, weighted) + routeGain * 120;
     return clamp(roundToTen(harderScore), 200, config.fullRangeMax);
   }
 
-  const easierRange = config.easierCeiling - 200;
-  const easierScore = 200 + Math.pow(weighted, 0.92) * easierRange + routeGain * 12;
+  const easierScore = interpolateCurve(config.easierCurve, weighted) + routeGain * 55;
   return clamp(roundToTen(easierScore), 200, config.easierCeiling);
 }
 
