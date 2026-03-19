@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MasterED</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-theme="light" data-nav-position="left">
+    <div class="splash-screen active" id="splash-screen" aria-hidden="true">
+      <div class="splash-orbit">
+        <div class="splash-core">
+          <div class="splash-mark"></div>
+        </div>
+        <span class="orbit-ring orbit-a"></span>
+        <span class="orbit-ring orbit-b"></span>
+        <span class="orbit-dot dot-a"></span>
+        <span class="orbit-dot dot-b"></span>
+      </div>
+      <div class="splash-copy">
+        <h1>MasterED</h1>
+        <p>Loading your prep space</p>
+      </div>
+    </div>
+
+    <section class="auth-view hidden" id="auth-view">
+      <div class="auth-panel auth-visual">
+        <button class="brand hero-brand" id="hero-logo-button" type="button">
+          <span class="brand-mark"></span>
+          <span class="brand-text">MasterED</span>
+        </button>
+        <div class="hero-copy">
+          <span class="hero-kicker">Digital SAT prep, cleaner</span>
+          <h2>Study in one place with a faster, calmer workflow.</h2>
+          <p>
+            Practice, review, time your sessions, and keep your prep dashboard synced without the clutter.
+          </p>
+        </div>
+        <div class="hero-stack">
+          <div class="hero-chip">Adaptive practice</div>
+          <div class="hero-chip">Accurate next SAT countdown</div>
+          <div class="hero-chip">Lock AI help</div>
+          <div class="hero-chip">Question bank and score tools</div>
+        </div>
+      </div>
+
+      <div class="auth-panel auth-card">
+        <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
+          <button class="auth-mode-button active" id="sign-in-mode" type="button">Sign in</button>
+          <button class="auth-mode-button" id="sign-up-mode" type="button">Sign up</button>
+        </div>
+
+        <div class="auth-heading">
+          <h2 id="auth-title">Welcome back</h2>
+          <p id="auth-subtitle">Use your email and password or continue with Google.</p>
+        </div>
+
+        <form class="auth-form" id="auth-form">
+          <label class="auth-field">
+            <span>Email</span>
+            <input id="auth-email" type="email" placeholder="you@example.com" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Password</span>
+            <input id="auth-password" type="password" placeholder="Enter your password" required />
+          </label>
+
+          <button class="auth-submit" id="auth-submit" type="submit">Sign in</button>
+        </form>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <button class="google-button" id="google-auth-button" type="button">
+          <span class="google-icon" aria-hidden="true"></span>
+          <span id="google-auth-label">Continue with Google</span>
+        </button>
+
+        <p class="auth-footer">
+          <span id="auth-footer-label">Need an account?</span>
+          <button class="auth-link-button" id="auth-switch-link" type="button">Create one</button>
+        </p>
+      </div>
+    </section>
+
+    <div class="app-shell hidden" id="app-shell">
+      <header class="masthead">
+        <button class="brand" id="logo-button" type="button">
+          <span class="brand-mark"></span>
+          <span class="brand-text">MasterED</span>
+        </button>
+
+        <div class="countdown-pill">
+          <span class="countdown-icon icon-countdown"></span>
+          <span>Next SAT:</span>
+          <strong id="next-sat-countdown">Loading...</strong>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="profile-menu">
+            <button class="profile-trigger" id="profile-trigger" type="button" aria-label="Open profile menu">
+              <span id="profile-initials">ME</span>
+            </button>
+            <div class="profile-dropdown hidden" id="profile-dropdown">
+              <div class="profile-card">
+                <div class="profile-card-name" id="profile-name">MasterED User</div>
+                <div class="profile-card-email" id="profile-email">you@example.com</div>
+              </div>
+              <button class="profile-action" id="profile-settings-button" type="button">Settings</button>
+              <button class="profile-action" id="change-name-button" type="button">Change name</button>
+              <button class="profile-action danger" id="sign-out-button" type="button">Sign out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <nav class="nav-strip" id="nav-strip">
+        <button class="nav-item active" data-view="home" type="button">
+          <span class="nav-icon icon-home"></span>
+          <span>Home</span>
+        </button>
+        <button class="nav-item" data-view="ai" type="button">
+          <span class="nav-icon icon-ai"></span>
+          <span>Lock AI</span>
+        </button>
+        <button class="nav-item" data-view="planner" type="button">
+          <span class="nav-icon icon-planner"></span>
+          <span>Study Planner</span>
+        </button>
+        <button class="nav-item" data-view="question-bank" type="button">
+          <span class="nav-icon icon-bank"></span>
+          <span>Question Bank</span>
+        </button>
+        <button class="nav-item" data-view="full-length" type="button">
+          <span class="nav-icon icon-tests"></span>
+          <span>Full-length Tests</span>
+        </button>
+        <button class="nav-item" data-view="vocab" type="button">
+          <span class="nav-icon icon-vocab"></span>
+          <span>Vocab</span>
+        </button>
+        <button class="nav-item" data-view="saved" type="button">
+          <span class="nav-icon icon-saved"></span>
+          <span>Saved</span>
+        </button>
+        <button class="nav-item" data-view="mistakes" type="button">
+          <span class="nav-icon icon-mistakes"></span>
+          <span>Mistakes</span>
+        </button>
+        <button class="nav-item" data-view="stats" type="button">
+          <span class="nav-icon icon-stats"></span>
+          <span>My Stats</span>
+        </button>
+        <button class="nav-item" data-view="predictor" type="button">
+          <span class="nav-icon icon-calculator"></span>
+          <span>Score Calculator</span>
+        </button>
+      </nav>
+
+      <main class="content-shell">
+        <section class="screen active" id="screen-home">
+          <div class="board">
+            <div class="dashboard-hero">
+              <div class="dashboard-copy">
+                <span class="panel-label">Today</span>
+                <h1>Keep the momentum without the noise.</h1>
+                <p>
+                  Jump back into practice, track your streak, and keep your prep space focused on exactly what you need next.
+                </p>
+              </div>
+              <div class="dashboard-metrics">
+                <div class="metric-card">
+                  <span>Questions this week</span>
+                  <strong>57</strong>
+                </div>
+                <div class="metric-card">
+                  <span>Current streak</span>
+                  <strong>6 days</strong>
+                </div>
+                <div class="metric-card accent">
+                  <span>Suggested next</span>
+                  <strong>Question Bank</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="dashboard-grid">
+              <div class="card card-jump">
+                <div class="card-header">
+                  <h2>Jump Back In</h2>
+                </div>
+
+                <button class="resume-card" type="button">
+                  <div class="resume-icon cyan">◔</div>
+                  <div class="resume-copy">
+                    <strong>Question Bank</strong>
+                    <span>Continue practicing</span>
+                  </div>
+                  <div class="arrow">→</div>
+                </button>
+
+                <button class="resume-card" type="button">
+                  <div class="resume-icon orange">⟟</div>
+                  <div class="resume-copy">
+                    <strong>Practice Tests</strong>
+                    <span>Continue practicing</span>
+                  </div>
+                  <div class="arrow">→</div>
+                </button>
+
+                <div class="mini-links">
+                  <div class="mini-link">
+                    <span class="mini-link-icon">◉</span>
+                    <span>Join Discord</span>
+                    <span class="reward">+20</span>
+                  </div>
+                  <div class="mini-link">
+                    <span class="mini-link-icon">◎</span>
+                    <span>Follow Instagram</span>
+                    <span class="reward">+25</span>
+                  </div>
+                  <div class="mini-link">
+                    <span class="mini-link-icon">●</span>
+                    <span>Give Feedback</span>
+                    <span class="reward neutral">Open</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card card-achievements">
+                <div class="card-header split">
+                  <h2>Achievements</h2>
+                  <span>6/8</span>
+                </div>
+
+                <div class="achievement-list">
+                  <div class="achievement-row done"><span class="check">✓</span><span>Complete 25 Questions</span></div>
+                  <div class="achievement-row done"><span class="check">✓</span><span>Complete 100 Questions</span></div>
+                  <div class="achievement-row done"><span class="check">✓</span><span>Complete 250 Questions</span></div>
+                  <div class="achievement-row done"><span class="check">✓</span><span>Complete 500 Questions</span></div>
+                  <div class="achievement-row done"><span class="check">✓</span><span>Complete 1000 Questions</span></div>
+                  <div class="achievement-row done"><span class="check">✓</span><span>Maintain a 3 day streak</span></div>
+                  <div class="achievement-row muted"><span class="check faded"></span><span>Maintain a 7 day streak</span></div>
+                  <div class="achievement-row muted"><span class="check faded"></span><span>Maintain a 14 day streak</span></div>
+                </div>
+              </div>
+
+              <div class="card card-tasks">
+                <div class="card-header split">
+                  <h2>Today's Tasks</h2>
+                  <span>0/0 tasks</span>
+                </div>
+                <div class="empty-state">
+                  <span>No study items scheduled</span>
+                </div>
+              </div>
+
+              <div class="card card-chart">
+                <div class="card-header">
+                  <h2>Questions this week</h2>
+                </div>
+                <div class="chart">
+                  <div class="chart-y">
+                    <span>60</span>
+                    <span>30</span>
+                    <span>0</span>
+                  </div>
+                  <div class="chart-bars">
+                    <div class="bar-group"><div class="bar tiny"></div><span>Thu</span></div>
+                    <div class="bar-group"><div class="bar none"></div><span>Fri</span></div>
+                    <div class="bar-group"><div class="bar none"></div><span>Sat</span></div>
+                    <div class="bar-group"><div class="bar tall"></div><span>Mon</span></div>
+                    <div class="bar-group"><div class="bar none"></div><span>Wed</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen blank-screen" id="screen-blank">
+          <div class="blank-inner"></div>
+        </section>
+
+        <section class="screen calculator-screen" id="screen-calculator">
+          <div class="calculator-frame-wrap">
+            <iframe
+              id="score-calculator-frame"
+              src="/embed/digital-sat-score-calculator"
+              width="1000"
+              height="900"
+              frameborder="0"
+              referrerpolicy="strict-origin-when-cross-origin"
+              title="Digital SAT Score Calculator"
+            ></iframe>
+          </div>
+        </section>
+
+        <section class="screen settings-screen" id="screen-settings">
+          <div class="settings-wrap">
+            <div class="settings-card">
+              <div class="card-header">
+                <h2>Settings</h2>
+              </div>
+
+              <div class="settings-grid">
+                <label class="settings-field">
+                  <span>Theme</span>
+                  <select id="theme-select">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                  </select>
+                </label>
+
+                <label class="settings-field">
+                  <span>Accent Color</span>
+                  <input id="accent-color-input" type="color" value="#23b1ec" />
+                </label>
+
+                <label class="settings-field">
+                  <span>Tabs Position</span>
+                  <select id="nav-position-select">
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                  </select>
+                </label>
+
+                <label class="settings-check">
+                  <input id="hide-countdown-toggle" type="checkbox" />
+                  <span>Hide Next SAT countdown</span>
+                </label>
+
+                <label class="settings-check">
+                  <input id="icons-only-toggle" type="checkbox" />
+                  <span>Show icons only for tabs</span>
+                </label>
+
+                <label class="settings-field wide">
+                  <span>Next SAT Date</span>
+                  <select id="sat-date-select"></select>
+                </label>
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

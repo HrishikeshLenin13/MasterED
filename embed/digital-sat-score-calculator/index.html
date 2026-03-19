@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital SAT Score Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="calculator-app">
+      <section class="left-panel">
+        <label class="adaptive-toggle">
+          <input id="adaptive-toggle" type="checkbox" checked />
+          <span class="adaptive-box"></span>
+          <span>Adaptive</span>
+        </label>
+
+        <div class="module-block" data-module="rw1">
+          <div class="module-header">
+            <h2>Reading and Writing Module 1</h2>
+            <div class="score-input">
+              <input id="rw1-input" type="number" min="0" max="27" value="22" />
+              <span>/27</span>
+            </div>
+          </div>
+          <input id="rw1-range" class="slider" type="range" min="0" max="27" value="22" />
+        </div>
+
+        <div class="module-block" data-module="rw2">
+          <div class="module-header">
+            <h2>Reading and Writing Module 2</h2>
+            <div class="score-input">
+              <input id="rw2-input" type="number" min="0" max="27" value="21" />
+              <span>/27</span>
+            </div>
+          </div>
+          <input id="rw2-range" class="slider" type="range" min="0" max="27" value="21" />
+        </div>
+
+        <div class="module-block" data-module="m1">
+          <div class="module-header">
+            <h2>Math Module 1</h2>
+            <div class="score-input">
+              <input id="m1-input" type="number" min="0" max="22" value="18" />
+              <span>/22</span>
+            </div>
+          </div>
+          <input id="m1-range" class="slider" type="range" min="0" max="22" value="18" />
+        </div>
+
+        <div class="module-block" data-module="m2">
+          <div class="module-header">
+            <h2>Math Module 2</h2>
+            <div class="score-input">
+              <input id="m2-input" type="number" min="0" max="22" value="17" />
+              <span>/22</span>
+            </div>
+          </div>
+          <input id="m2-range" class="slider" type="range" min="0" max="22" value="17" />
+        </div>
+      </section>
+
+      <aside class="right-panel">
+        <section class="summary-block">
+          <p class="summary-label">TOTAL SCORE</p>
+          <div class="big-score-row">
+            <strong id="total-score">1290</strong>
+            <span>| 400 - 1600</span>
+          </div>
+          <p class="average-row"><strong>Average score:</strong> 1050</p>
+        </section>
+
+        <section class="summary-block bordered">
+          <p class="summary-label">SECTION SCORES</p>
+
+          <div class="section-score">
+            <h3>Reading and Writing</h3>
+            <div class="section-score-row">
+              <strong id="rw-score">640</strong>
+              <span>| 200 - 800</span>
+            </div>
+            <p class="average-row"><strong>Average score:</strong> 529</p>
+          </div>
+
+          <div class="section-score">
+            <h3>Math</h3>
+            <div class="section-score-row">
+              <strong id="math-score">650</strong>
+              <span>| 200 - 800</span>
+            </div>
+            <p class="average-row"><strong>Average score:</strong> 521</p>
+          </div>
+        </section>
+
+        <section class="summary-block notes-block">
+          <p class="summary-label">HOW THIS ESTIMATE WORKS</p>
+          <ul>
+            <li>Uses the official Digital SAT module counts: `27 + 27` for Reading and Writing and `22 + 22` for Math.</li>
+            <li>Weights Module 2 more heavily when adaptive scoring is enabled, mirroring public adaptive-estimator patterns.</li>
+            <li>Rounds section scores to the SAT’s 10-point scale and caps them in the official `200-800` range.</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
